@@ -11,6 +11,9 @@ import player from '@/pages/player'
 import aboutus from '@/pages/aboutus'
 import about from '@/pages/about'
 import search from '@/pages/search'
+import login from '@/pages/login'
+import register from '@/pages/register'
+import forget from '@/pages/forget'
 import test from '@/pages/test'
 import testplayer from '@/pages/testplayer'
 import exportJSON from '@/pages/exportJSON'
@@ -74,6 +77,21 @@ export default new Router({
       path: '/search',
       name: 'search',
       component: resolve => require(['@/pages/search'],resolve)
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: resolve => require(['@/pages/login'],resolve)
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: resolve => require(['@/pages/register'],resolve)
+    },
+    {
+      path: '/forget',
+      name: 'forget',
+      component: resolve => require(['@/pages/forget'],resolve)
     }
   ],
   scrollBehavior(to, from, savedPosition) {

@@ -22,6 +22,7 @@
                 prefix-icon="el-icon-search"
                 :placeholder="keyWord"
                 maxlength="10"
+                @keyup.enter.native="getSearch()"
                 clearable
               ></el-input>
             </el-col>

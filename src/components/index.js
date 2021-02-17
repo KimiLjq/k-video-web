@@ -10,6 +10,8 @@ import hottags from './hottags'
 import discuss from './discuss'
 import recommend from './recommend'
 import rankicon from './rankicon'
+import comment from './comment'
+import subComment from './subComment'
 
 const components = {
   items,
@@ -23,7 +25,9 @@ const components = {
   hottags,
   discuss,
   recommend,
-  rankicon
+  rankicon,
+  comment,
+  subComment
 }
 
 const install = (Vue, options = {}) => {

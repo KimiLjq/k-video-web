@@ -13,6 +13,9 @@ const store = new Vuex.Store({
       content: "hello, ShotCut",
       date: now
     },
+    property: {
+      isLogin: false
+    },
     webData: {}
   },
   mutations: {

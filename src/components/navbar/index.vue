@@ -26,6 +26,7 @@
               prefix-icon="el-icon-search"
               placeholder="请输入关键字"
               maxlength="10"
+              @keyup.enter.native="getSearch"
               clearable
             ></el-input>
           </el-col>
@@ -35,10 +36,11 @@
         </el-row>
       </div>
       <!-- 隐藏模块 -->
-      <div class="user" v-if="false">
-        <el-button circle>
+      <div class="user" v-if="true">
+        <el-button @click="getPersonal()" circle>
           <i class="icon-user"></i>
         </el-button>
+
       </div>
     </div>
     <div class="menubar" v-show="menu_visiable">
@@ -162,6 +164,11 @@ export default {
           path: "/search",
           query: { keyWord: this.keyWord }
         });
+      }
+    },
+    getPersonal() {
+      if (!this.$store.state.property.isLogin) {
+        this.$router.push({path:"/login"});
       }
     }
   },

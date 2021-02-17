@@ -1,10 +1,10 @@
 <template>
   <div class="discuss">
     <h3>评论</h3>
-    <div class="discuss-void">
+    <!-- <div class="discuss-void">
       <p>评论功能暂未开放</p>
-    </div>
-    <!-- <div class="discuss-login" v-if="!isLogin">
+    </div> -->
+    <div class="discuss-login" v-if="!isLogin">
       <p>
         点击此处
         <a @click="setLoginStatus()">
@@ -32,15 +32,25 @@
         v-model="inputtext"
         show-word-limit
       ></el-input>
-    </div> -->
-    <el-button class="discuss-btn" size="mini" v-show="isNotEmpty" round>发布评论</el-button>
-    <div class="discuss-details">
-      <p>暂无评论</p>
+    </div>
+    <el-button class="discuss-btn" size="mini" v-show="isNotEmpty" @click="postComment()" round>发布评论</el-button>
+<!--    <div class="discuss-details" v-show="!isNotEmpty">-->
+<!--      <p>暂无评论</p>-->
+<!--    </div>-->
+    <div class="items-right-row">
+      <comment class="discuss-content"
+        v-for="item in commentList"
+        :key="item.id"
+        :data="item"
+      >
+      </comment>
     </div>
   </div>
 </template>
 
 <script>
+import utils from "../../../static/utils/utils";
+
 export default {
   name: "discuss",
   props: {},
@@ -48,12 +58,24 @@ export default {
     return {
       isLogin: false,
       inputtext: "",
-      isNotEmpty: false
+      isNotEmpty: false,
+      commentList:[
+        {id: '1', name: 'kimi', content: '故事的小黄花', date: utils.getNowTime()},
+        {id: '2', name: 'zhou', content: '从出生那年就飘着', date: utils.getNowTime()}
+      ]
     };
   },
   methods: {
     setLoginStatus() {
       this.isLogin = true;
+    },
+
+    postComment() {
+      this.isNotEmpty = true;
+      console.log(this.inputtext);
+      let comment = {id: this.commentList.length+1, name: "kimi", content: this.inputtext, date: this.nowTime};
+      this.commentList.unshift(comment);
+      this.inputtext = "";
     }
   },
   watch: {
@@ -65,7 +87,7 @@ export default {
         this.isNotEmpty = false;
       }
     }
-  }
+  },
 };
 </script>
 
@@ -217,6 +239,22 @@ export default {
 
     p {
       text-align: center;
+    }
+  }
+
+  .items-right-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    .discuss-content {
+      width: 100%;
+      background: #fff;
+      //display: flex;
+      //justify-content: flex-start;
+      //align-items: center;
     }
   }
 }

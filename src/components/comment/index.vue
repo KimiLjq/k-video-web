@@ -57,7 +57,7 @@ export default {
       isNotEmpty: false,
       isShowInputArea: false,
       subCommentList:[
-        {id: '1', replier: 'carry', atName: 'kimi', content: '童年的纸飞机', date: utils.getNowTime()},
+        {id: '1', replier: 'jay', atName: 'kimi', content: '童年的纸飞机', date: utils.getNowTime()},
         {id: '2', replier: 'lulu', atName:'zhou', content: '但偏偏雨渐渐', date: utils.getNowTime()}
       ]
     }

@@ -14,7 +14,7 @@ const store = new Vuex.Store({
       date: now
     },
     property: {
-      isLogin: false
+      isLogin: true
     },
     webData: {}
   },

@@ -35,7 +35,6 @@
           </el-col>
         </el-row>
       </div>
-      <!-- 隐藏模块 -->
       <div class="user" v-if="true">
         <el-button @click="getPersonal()" circle>
           <i class="icon-user"></i>
@@ -168,7 +167,18 @@ export default {
     },
     getPersonal() {
       if (!this.$store.state.property.isLogin) {
-        this.$router.push({path:"/login"});
+        let loginIndex =this.$router.resolve({
+          path: '/login',
+        })
+
+        window.open(loginIndex.href, '_blank');
+      }
+      else {
+        let personIndex = this.$router.resolve({
+          path: '/person',
+        });
+
+        window.open(personIndex.href, '_blank');
       }
     }
   },

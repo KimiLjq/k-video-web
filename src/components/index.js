@@ -12,6 +12,8 @@ import recommend from './recommend'
 import rankicon from './rankicon'
 import comment from './comment'
 import subComment from './subComment'
+import myvideoitems from './myvideoitems'
+import followerItem from './followerItem'
 
 const components = {
   items,
@@ -27,7 +29,9 @@ const components = {
   recommend,
   rankicon,
   comment,
-  subComment
+  subComment,
+  myvideoitems,
+  followerItem
 }
 
 const install = (Vue, options = {}) => {

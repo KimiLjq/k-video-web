@@ -14,6 +14,7 @@ import search from '@/pages/search'
 import login from '@/pages/login'
 import register from '@/pages/register'
 import forget from '@/pages/forget'
+import person from '@/pages/person'
 import test from '@/pages/test'
 import testplayer from '@/pages/testplayer'
 import exportJSON from '@/pages/exportJSON'
@@ -92,6 +93,11 @@ export default new Router({
       path: '/forget',
       name: 'forget',
       component: resolve => require(['@/pages/forget'],resolve)
+    },
+    {
+      path: '/person',
+      name: 'person',
+      component: resolve => require(['@/pages/person'],resolve)
     }
   ],
   scrollBehavior(to, from, savedPosition) {

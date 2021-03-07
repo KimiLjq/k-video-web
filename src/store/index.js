@@ -16,7 +16,7 @@ const store = new Vuex.Store({
     property: {
       isLogin: localStorage.isLogin === "true" ? true : false,
       user: JSON.parse(localStorage.getItem("user")),
-      ip:"http://172.16.75.32:8080/"
+      ip:"http://172.16.75.32:8080"
     },
     webData: {}
   },

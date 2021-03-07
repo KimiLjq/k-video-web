@@ -35,10 +35,11 @@
           </el-col>
         </el-row>
       </div>
-      <div class="user" v-if="true">
-        <el-button @click="getPersonal()" circle>
-          <i class="icon-user"></i>
-        </el-button>
+      <div class="user">
+        <img class="icon-user" :src="avatar" @click="getPersonal()">
+<!--        <el-button @click="getPersonal()" circle>-->
+<!--          <i class="icon-user"></i>-->
+<!--        </el-button>-->
         <div v-show="!getLoginState">
           <a @click="getPersonal()">
             <span style="margin-left: 20px">登录</span>
@@ -114,7 +115,7 @@ export default {
   inject: ["reload"],
   data() {
     return {
-      isLogin: this.$store.state.property.isLogin,
+      avatar: this.$store.state.property.ip + "/ki-video/user/avatar/unLogin-avatar.png",
       username: "",
       item: this.activeitem,
       menu_visiable: this.menu_v,
@@ -126,7 +127,6 @@ export default {
   },
   created() {},
   mounted() {
-    console.log("this.$store.state.property.isLogin+navbar"+this.$store.state.property.isLogin);
     console.log(this.scroll);
     if (this.scroll) {
       this.menu_visiable = true;
@@ -139,6 +139,11 @@ export default {
 
     if (this.$store.state.property.user) {
       this.username = this.$store.state.property.user.username;
+    }
+
+    if (this.$store.state.property.user) {
+      console.log("this.$store.state.property.ip + this.$store.state.property.user.avatarUrl :" + this.$store.state.property.ip + this.$store.state.property.user.avatarUrl);
+      this.avatar = this.$store.state.property.ip + this.$store.state.property.user.avatarUrl;
     }
 
     if (this.extend) {
@@ -191,6 +196,7 @@ export default {
     },
     getPersonal() {
       console.log("this.$store.state.property.isLogin" + this.$store.state.property.isLogin);
+      console.log("11111:   ", this.avatar)
       if (!this.$store.state.property.isLogin) {
         let loginIndex =this.$router.resolve({
           path: '/login',
@@ -217,7 +223,7 @@ export default {
     },
     logout() {
       console.log("退出登录");
-      this.isLogin = false;
+      this.avatar = this.$store.state.property.ip + "/ki-video/user/avatar/unLogin-avatar.png";
       localStorage.removeItem("user");
       localStorage.isLogin = "false";
       this.$store.state.property.isLogin = false;
@@ -403,12 +409,12 @@ export default {
       border: 0;
 
       .icon-user:before {
-        content: url("../../assets/user.png");
         width: 40px;
         height: 40px;
         position: relative;
         top: -12px;
         left: -12px;
+        cursor: pointer;
       }
     }
   }

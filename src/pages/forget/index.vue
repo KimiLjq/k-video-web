@@ -26,7 +26,7 @@
           </el-form-item>
           <el-form-item label="验证码" prop="verification" class="interval up">
             <el-input v-model="ruleForm.verification" class="inputLeft"></el-input>
-            <el-button type="primary" :disabled="clickVeri" @click="sub" style="right:0px;width: 35%; position:absolute;z-index: 1">
+            <el-button type="primary" :disabled="clickVeri" @click="getVerification()" style="right:0px;width: 35%; position:absolute;z-index: 1">
               <span v-show="!clickVeri">获取验证码</span>
               <span v-show="clickVeri">{{count}} s</span>
             </el-button>
@@ -96,21 +96,56 @@ export default {
     }
   },
   methods: {
-    sub() {
-      const TIME_COUNT = 60;
-      if (!this.timer) {
-        this.count = TIME_COUNT;
-        this.clickVeri = true;
-        this.timer = setInterval(() => {
-          if (this.count > 0 && this.count <= TIME_COUNT) {
-            this.count--;
-          } else {
-            this.clickVeri = false;
-            clearInterval(this.timer);
-            this.timer = null;
+    getVerification() {
+      let that = this;
+      this.$axios.post(
+        that.$store.state.property.ip + "/ki-video/user/verificationCode",
+        that.$qs.stringify({
+          email : that.ruleForm.email,
+          type : 2
+        })
+      ).then(function (response) {
+        let res = JSON.parse(JSON.stringify(response));
+        if (res.data.code == 200) {
+          const TIME_COUNT = 60*60;
+          if (!this.timer) {
+            this.count = TIME_COUNT;
+            this.clickVeri = true;
+            this.timer = setInterval(() => {
+              if (this.count > 0 && this.count <= TIME_COUNT) {
+                this.count--;
+              } else {
+                this.clickVeri = false;
+                clearInterval(this.timer);
+                this.timer = null;
+              }
+            }, 1000)
           }
-        }, 1000)
-      }
+        }
+        else if (res.data.code == 520) {
+          alert(res.data.data);
+        }
+      })
+    },
+    sub() {
+      let that = this;
+      this.$axios.post(
+        that.$store.state.property.ip + "/ki-video/user/resetPassword",
+        that.$qs.stringify({
+          email : that.ruleForm.email,
+          newPassword : that.ruleForm.password,
+          verification : that.ruleForm.verification
+        })
+      ).then(function(response) {
+        let res = JSON.parse(JSON.stringify(response));
+        console.log(res);
+        if (res.data.code == 200) {
+          alert(res.data.data + "，快去登录吧");
+        }
+        else {
+          alert(res.data.data);
+        }
+      })
     },
     gotoLogin() {
       this.$router.push({path:"/login"});

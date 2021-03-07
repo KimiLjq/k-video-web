@@ -89,32 +89,38 @@ export default {
     sub() {
       let that = this;
       this.$axios.post(
-        that.$store.state.property.ip + "ki-video/user/verificationCode",
+        that.$store.state.property.ip + "/ki-video/user/verificationCode",
         that.$qs.stringify({
             email : that.ruleForm.email,
             type : 1
         })
       ).then(function (response) {
-        const TIME_COUNT = 60*60;
-        if (!that.timer) {
-          that.count = TIME_COUNT;
-          that.clickVeri = true;
-          that.timer = setInterval(() => {
-            if (that.count > 0 && that.count <= TIME_COUNT) {
-              that.count--;
-            } else {
-              that.clickVeri = false;
-              clearInterval(that.timer);
-              that.timer = null;
-            }
-          }, 1000)
+        let res = JSON.parse(JSON.stringify(response));
+        if (res.data.code) {
+          const TIME_COUNT = 60*60;
+          if (!that.timer) {
+            that.count = TIME_COUNT;
+            that.clickVeri = true;
+            that.timer = setInterval(() => {
+              if (that.count > 0 && that.count <= TIME_COUNT) {
+                that.count--;
+              } else {
+                that.clickVeri = false;
+                clearInterval(that.timer);
+                that.timer = null;
+              }
+            }, 1000)
+          }
+        }
+        else if (res.data.code == 520) {
+          alert(res.data.data);
         }
       })
     },
     register() {
       let that = this;
       this.$axios.post(
-        that.$store.state.property.ip + "ki-video/user/register",
+        that.$store.state.property.ip + "/ki-video/user/register",
         that.$qs.stringify({
           username : that.ruleForm.nickname,
           email : that.ruleForm.email,

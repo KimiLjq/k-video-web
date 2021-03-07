@@ -32,7 +32,7 @@
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" :disabled="clickable" @click="sub" style="width: 82.5%">注册</el-button>
+            <el-button type="primary" :disabled="clickable" @click="register" style="width: 82.5%">注册</el-button>
           </el-form-item>
           <el-form-item class="choose">
             <a class="" @click="gotoLogin()">
@@ -87,20 +87,50 @@ export default {
   },
   methods: {
     sub() {
-      const TIME_COUNT = 60;
-      if (!this.timer) {
-        this.count = TIME_COUNT;
-        this.clickVeri = true;
-        this.timer = setInterval(() => {
-          if (this.count > 0 && this.count <= TIME_COUNT) {
-            this.count--;
-          } else {
-            this.clickVeri = false;
-            clearInterval(this.timer);
-            this.timer = null;
-          }
-        }, 1000)
-      }
+      let that = this;
+      this.$axios.post(
+        that.$store.state.property.ip + "ki-video/user/verificationCode",
+        that.$qs.stringify({
+            email : that.ruleForm.email,
+            type : 1
+        })
+      ).then(function (response) {
+        const TIME_COUNT = 60*60;
+        if (!that.timer) {
+          that.count = TIME_COUNT;
+          that.clickVeri = true;
+          that.timer = setInterval(() => {
+            if (that.count > 0 && that.count <= TIME_COUNT) {
+              that.count--;
+            } else {
+              that.clickVeri = false;
+              clearInterval(that.timer);
+              that.timer = null;
+            }
+          }, 1000)
+        }
+      })
+    },
+    register() {
+      let that = this;
+      this.$axios.post(
+        that.$store.state.property.ip + "ki-video/user/register",
+        that.$qs.stringify({
+          username : that.ruleForm.nickname,
+          email : that.ruleForm.email,
+          password : that.ruleForm.password,
+          verification : that.ruleForm.verification
+        })
+      ).then(function(response) {
+        let res = JSON.parse(JSON.stringify(response));
+        console.log(res);
+        if (res.data.code == 200) {
+          alert(res.data.data + "，快去登录吧");
+        }
+        else {
+          alert(res.data.data);
+        }
+      })
     },
     gotoLogin() {
       this.$router.push({path:"/login"});

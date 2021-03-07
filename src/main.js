@@ -8,6 +8,7 @@ import store from './store'
 import Vcomp from './components/index'
 import Axios from 'axios'
 import VueVideoPlayer from 'vue-video-player'
+import qs from 'qs'
 
 import '@videojs/http-streaming'
 
@@ -22,6 +23,7 @@ Vue.use(Vcomp)
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = Axios
+Vue.prototype.$qs = qs
 
 Vue.directive('title', {
   inserted: function (el, binding) {
@@ -29,8 +31,34 @@ Vue.directive('title', {
   }
 })
 
+Axios.interceptors.request.use(config => {
+  config.headers.token = localStorage.userToken;
+  return config;
+})
 
 router.beforeEach((to, from, next) => {
+  console.log("from Route:"+from.fullPath);
+  if (localStorage.username && localStorage.userToken && from.fullPath == "/" && to.fullPath == "/") {
+    console.log("autoLogin");
+    Axios
+      .post("http://172.16.75.32:8080/" + "ki-video/user/autoLogin", qs.stringify({
+        username : localStorage.username,
+      }))
+      .then(function (response) {
+        let res = JSON.parse(JSON.stringify(response));
+        console.log(res);
+        if (res.data.code == 200) {
+          localStorage.isLogin = "true";
+          let user = JSON.stringify(res.data.data);
+          localStorage.setItem("user", [user]);
+          store.state.property.isLogin = true;
+          store.state.property.user = res.data.data;
+        }
+        else {
+          localStorage.isLogin = "false";
+        }
+      })
+    };
   Axios
     .get("../../../static/data/data.json")
     .then(response => {
@@ -47,7 +75,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to, from, next) => {
-  //window.scrollTo(0, 0)
+  window.scrollTo(0, 0)
 })
 
 /* eslint-disable no-new */

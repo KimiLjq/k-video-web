@@ -16,8 +16,8 @@
 
       <div class="login-container">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="70px">
-          <el-form-item label="邮箱" prop="email" class="interval up" >
-            <el-input v-model="ruleForm.email" class="inputLeft"></el-input>
+          <el-form-item label="用户名" prop="username" class="interval up" >
+            <el-input v-model="ruleForm.username" class="inputLeft"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password" class="interval up">
             <el-input type="password" v-model="ruleForm.password" class="inputLeft"></el-input>
@@ -55,12 +55,12 @@ export default {
       clickable: true,
       activeitem: ["", "", "", "", "", "", ""],
       ruleForm: {
-        email: '',
+        username: '',
         password: ''
       },
       rules: {
-        email: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' }
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
@@ -76,13 +76,38 @@ export default {
       this.$router.push({path:"/forget"});
     },
     sub() {
+      let that = this;
+      this.$axios.post(
+        that.$store.state.property.ip+"ki-video/user/login",
+        this.$qs.stringify({
+            username : that.ruleForm.username,
+            password : that.ruleForm.password
+          })
+      ).then(function (response){
+        let res = JSON.parse(JSON.stringify(response));
+        if (res.data.code == 200) {
+          console.log(res.data.data.userToken);
+          localStorage.username = res.data.data.username;
+          localStorage.userToken = res.data.data.userToken;
+          localStorage.isLogin = "true";
+          let user = JSON.stringify(res.data.data);
+          localStorage.setItem("user", [user]);
+          that.$store.state.property.isLogin = true;
+          that.$store.state.property.user = res.data.data;
+          that.$router.push({path:"/"});
+        }
+        else {
+          alert(res.data.msg);
+          localStorage.isLogin = "false";
+        }
 
+      })
     }
   },
   watch: {
     ruleForm: {
       handler:function (newVal, oldVal) {
-        if (newVal.email != "" && newVal.password != "") {
+        if (newVal.username != "" && newVal.password != "") {
           this.clickable = false;
         }
         else {

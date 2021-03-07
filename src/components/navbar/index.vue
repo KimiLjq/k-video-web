@@ -39,7 +39,24 @@
         <el-button @click="getPersonal()" circle>
           <i class="icon-user"></i>
         </el-button>
-
+        <div v-show="!getLoginState">
+          <a @click="getPersonal()">
+            <span style="margin-left: 20px">登录</span>
+          </a>
+          <span style="margin-left: 5px;margin-right: 5px">|</span>
+          <a @click="register()">
+            <span>注册</span>
+          </a>
+        </div>
+        <div v-show="getLoginState">
+          <a @click="getPersonal()">
+            <span style="margin-left: 20px">{{ getUsername }}</span>
+          </a>
+          <span style="margin-right: 5px; margin-left: 5px">|</span>
+          <a @click="logout()">
+            <span>退出</span>
+          </a>
+        </div>
       </div>
     </div>
     <div class="menubar" v-show="menu_visiable">
@@ -97,6 +114,8 @@ export default {
   inject: ["reload"],
   data() {
     return {
+      isLogin: this.$store.state.property.isLogin,
+      username: "",
       item: this.activeitem,
       menu_visiable: this.menu_v,
       btn_visiable: this.btn_v,
@@ -107,6 +126,7 @@ export default {
   },
   created() {},
   mounted() {
+    console.log("this.$store.state.property.isLogin+navbar"+this.$store.state.property.isLogin);
     console.log(this.scroll);
     if (this.scroll) {
       this.menu_visiable = true;
@@ -115,6 +135,10 @@ export default {
     } else {
       this.menu_visiable = false;
       this.btn_visiable = true;
+    }
+
+    if (this.$store.state.property.user) {
+      this.username = this.$store.state.property.user.username;
     }
 
     if (this.extend) {
@@ -166,11 +190,13 @@ export default {
       }
     },
     getPersonal() {
+      console.log("this.$store.state.property.isLogin" + this.$store.state.property.isLogin);
       if (!this.$store.state.property.isLogin) {
         let loginIndex =this.$router.resolve({
           path: '/login',
         })
 
+        console.log("toLogin");
         window.open(loginIndex.href, '_blank');
       }
       else {
@@ -178,8 +204,37 @@ export default {
           path: '/person',
         });
 
+        console.log("toPerson");
         window.open(personIndex.href, '_blank');
       }
+    },
+    register() {
+      let registerPage = this.$router.resolve({
+        path: 'register',
+      });
+
+      window.open(registerPage.href, '_blank');
+    },
+    logout() {
+      console.log("退出登录");
+      this.isLogin = false;
+      localStorage.removeItem("user");
+      localStorage.isLogin = "false";
+      this.$store.state.property.isLogin = false;
+      this.$store.state.property.user = null;
+      localStorage.username = "";
+      localStorage.userToken = "";
+    }
+  },
+  computed: {
+    getLoginState() {
+      return this.$store.state.property.isLogin;
+    },
+    getUsername() {
+      if (this.$store.state.property.user) {
+        return this.$store.state.property.user.username;
+      }
+      return "";
     }
   },
   watch: {
@@ -331,10 +386,14 @@ export default {
 
   .user {
     position: absolute;
-    right: 7%;
+    right: 13%;
     display: flex;
     justify-content: center;
     align-items: center;
+    font: {
+      size: 16px;
+    };
+    color: #FFFFFF;
 
     button {
       width: 40px;

@@ -4,7 +4,7 @@
     <!-- <div class="discuss-void">
       <p>评论功能暂未开放</p>
     </div> -->
-    <div class="discuss-login" v-if="!isLogin">
+    <div class="discuss-login" v-if="!getLoginState">
       <p>
         点击此处
         <a @click="setLoginStatus()">
@@ -21,7 +21,7 @@
         </a>
       </div>
     </div>
-    <div class="discuss-input" v-if="isLogin">
+    <div class="discuss-input" v-if="getLoginState">
       <img class="discuss-input-profile" alt="profile" src="../../assets/profilephoto.png">
       <el-input
         type="textarea"
@@ -56,7 +56,6 @@ export default {
   props: {},
   data() {
     return {
-      isLogin: false,
       inputtext: "",
       isNotEmpty: false,
       commentList:[
@@ -67,16 +66,21 @@ export default {
   },
   methods: {
     setLoginStatus() {
-      this.isLogin = true;
+      this.$router.push({path:"/login"})
     },
 
     postComment() {
       this.isNotEmpty = true;
       console.log(this.inputtext);
-      let comment = {id: this.commentList.length+1, name: "kimi", content: this.inputtext, date: this.nowTime};
+      let comment = {id: this.commentList.length+1, name: "kimi", content: this.inputtext, date: utils.getNowTime()};
       this.commentList.unshift(comment);
       this.inputtext = "";
     }
+  },
+  computed: {
+    getLoginState() {
+      return this.$store.state.property.isLogin;
+    },
   },
   watch: {
     inputtext(inputtext) {

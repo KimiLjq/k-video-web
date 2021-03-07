@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import store from "../../store";
+
 export default {
   components: {},
   data() {
@@ -31,7 +33,7 @@ export default {
       module_data_10: this.$store.state.webData.module_data_10,
       module_data_2: this.$store.state.webData.module_data_2,
       module_data_3: this.$store.state.webData.module_data_3,
-      module_data_5: this.$store.state.webData.module_data_5    
+      module_data_5: this.$store.state.webData.module_data_5
     };
   },
   created() {
@@ -42,7 +44,8 @@ export default {
   },
   destroyed() {
   },
-  methods: {}
+  methods: {
+  }
 };
 </script>
 

@@ -51,7 +51,6 @@ export default {
   },
   data() {
     return {
-      isLogin: true,
       holder: "说两句吧...",
       inputtext: "",
       isNotEmpty: false,
@@ -78,7 +77,7 @@ export default {
     },
 
     postComment() {
-      let subComment = {id: this.subCommentList.length+1, replier: 'arvit', atName: this.data.name, content: this.inputtext, date: utils.getNowTime()};
+      let subComment = {id: this.subCommentList.length+1, replier: this.$store.state.property.user.username, atName: this.data.name, content: this.inputtext, date: utils.getNowTime()};
       this.subCommentList.push(subComment);
       console.log(subComment);
       this.inputtext = "";

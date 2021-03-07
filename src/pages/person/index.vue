@@ -15,13 +15,13 @@
         <div class="iconColor"></div>
         <img class="icon-user" alt="profile" src="../../assets/profilephoto.png">
         <div class="info">
-          <span style="margin-right: 5px !important;">Kimijiaqili</span>
-          <span>(17jqli2@stu.edu.cn)</span>
+          <span style="margin-right: 5px !important;">{{ this.$store.state.property.user.username }}</span>
+          <span>({{this.$store.state.property.user.email}})</span>
           <div class="other-info">
             <span>作品数：0</span>
-            <span>关注数：0</span>
-            <span>粉丝数：0</span>
-            <span>获赞数：0</span>
+            <span>关注数：{{this.$store.state.property.user.followsCount}}</span>
+            <span>粉丝数：{{ this.$store.state.property.user.fansCount }}</span>
+            <span>获赞数：{{ this.$store.state.property.user.receiveLikeCount }}</span>
           </div>
         </div>
         <el-button class="discuss-btn" size="mini" @click="postComment()" round>编辑信息</el-button>

@@ -1,7 +1,7 @@
 <template>
   <div class="playlet-page">
     <div class="header">
-      <homeheader :scroll="true" :style_shade="true" :activeitem="activeitem" :data="bgdata"></homeheader>
+      <homeheader :scroll="true" :style_shade="true" :activeitem="activeitem"></homeheader>
     </div>
     <div class="container">
       <div class="left"></div>
@@ -23,11 +23,9 @@ export default {
   data() {
     return {
       activeitem: ["", "", "", "", "", true],
-      bgdata: this.$store.state.webData.background.data,      
-      module_data_5: this.$store.state.webData.module_data_5
+      module_data_5: JSON.parse(sessionStorage.getItem("playlet"))
     };
   },
-  created() {},
   methods: {}
 };
 </script>

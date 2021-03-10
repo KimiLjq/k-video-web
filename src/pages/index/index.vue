@@ -53,7 +53,7 @@
                 :current-page="currentPage1"
                 :page-size="35"
                 layout="total, prev, pager, next, jumper"
-                :total="35"
+                :total="data.data.length"
               ></el-pagination>
             </div>
           </el-tab-pane>

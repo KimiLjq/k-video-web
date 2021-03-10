@@ -127,13 +127,14 @@ export default {
     return {
       counter: 0,
       timer: null,
-      items: this.data,
+      items: JSON.parse(sessionStorage.getItem("marqueeData")),
       reactiveWidth: 0,
       reactiveHeight: 0
     };
   },
   created() {
-    //console.log(this.data);
+    console.log("headheader");
+    console.log("**********************"+this.data);
     this.items.forEach(item => {
       this.$set(item, "actived", false);
     });
@@ -212,7 +213,7 @@ export default {
           {
             withCredentials: false,
             type: obj.type,
-            src: obj.video_url
+            src: obj.videoUrl
           }
         ]
       };

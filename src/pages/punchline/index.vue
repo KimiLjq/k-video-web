@@ -1,7 +1,7 @@
 <template>
   <div class="punchline-page">
     <div class="header">
-      <homeheader :scroll="true" :style_shade="true" :activeitem="activeitem" :data="bgdata"></homeheader>
+      <homeheader :scroll="true" :style_shade="true" :activeitem="activeitem"></homeheader>
     </div>
     <div class="container">
       <div class="left"></div>
@@ -23,8 +23,7 @@ export default {
   data() {
     return {
       activeitem: ["", "", "", "", true, ""],
-      bgdata: this.$store.state.webData.background.data,
-      module_data_4: this.$store.state.webData.module_data_4
+      module_data_4: JSON.parse(sessionStorage.getItem("punchline"))
     };
   },
   created() {},

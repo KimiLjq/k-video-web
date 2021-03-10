@@ -160,6 +160,23 @@ export default {
     linkTo(path) {
       this.$router.push({ name: path });
     },
+    linkToPunchline() {
+      let that = this;
+      this.$axios.post(
+        that.$store.state.property.ip + "/ki-video/video/punchline"
+      ).then(function (response) {
+        let res = JSON.parse(JSON.stringify(response));
+        if (res.data.code == 200) {
+          that.$router.push({
+            path: "/punchline",
+            query: { module_data_4: res.data.data }
+          });
+        }
+        else {
+          console.log(res.data.data);
+        }
+      })
+    },
     handleScroll() {
       let scrollTop =
         window.pageYOffset ||

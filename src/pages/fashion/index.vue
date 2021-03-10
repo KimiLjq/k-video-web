@@ -1,14 +1,15 @@
 <template>
   <div class="fashion-page">
     <div class="header">
-      <homeheader :scroll="true" :style_shade="true" :activeitem="activeitem" :data="bgdata"></homeheader>
+      <homeheader :scroll="true" :style_shade="true" :activeitem="activeitem"></homeheader>
     </div>
     <div class="container">
       <div class="left"></div>
       <div class="right"></div>
       <div class="main">
-        <frame :data="module_data_1" :limit="14">
-        <frame :data="module_data_2" :limit="14">
+        <frame v-for="data in module_data" :key="data.id" :data="data" :limit="14"></frame>
+<!--        <frame :data="module_data_1" :limit="14">-->
+<!--        <frame :data="module_data_2" :limit="14">-->
       </div>
     </div>
     <div class="footer">
@@ -24,9 +25,7 @@ export default {
   data() {
     return {
       activeitem: ["", "", "", true, "", ""],
-      bgdata: this.$store.state.webData.background.data,
-      module_data_1: this.$store.state.webData.module_data_1,
-      module_data_2: this.$store.state.webData.module_data_2
+      module_data: JSON.parse(sessionStorage.getItem("fashion"))
     };
   },
   created() {},

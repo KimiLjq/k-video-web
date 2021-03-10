@@ -38,10 +38,11 @@ Axios.interceptors.request.use(config => {
 
 router.beforeEach((to, from, next) => {
   console.log("from Route:"+from.fullPath);
+  let ip = "http://172.16.75.32:8080/"
   if (localStorage.username && localStorage.userToken && from.fullPath == "/" && to.fullPath == "/") {
     console.log("autoLogin");
     Axios
-      .post("http://172.16.75.32:8080/" + "ki-video/user/autoLogin", qs.stringify({
+      .post(ip + "ki-video/user/autoLogin", qs.stringify({
         username : localStorage.username,
       }))
       .then(function (response) {
@@ -58,7 +59,84 @@ router.beforeEach((to, from, next) => {
           localStorage.isLogin = "false";
         }
       })
-    };
+  };
+
+  if (from.fullPath == "/" && to.fullPath == "/") {
+    Axios
+      .post(ip + "ki-video/video/marqueeData")
+      .then(function (response) {
+        console.log("marqueeData");
+        let res = JSON.parse(JSON.stringify(response));
+        if (res.data.code == 200) {
+          sessionStorage.setItem("marqueeData", JSON.stringify(res.data.data));
+        }
+      })
+      .catch(err => {
+        console.log(err.message);
+      })
+
+    Axios
+      .post(ip + "ki-video/video/homePage")
+      .then(function (response){
+        let res = JSON.parse(JSON.stringify(response));
+        if (res.data.code == 200) {
+          sessionStorage.setItem("homePage", JSON.stringify(res.data.data));
+        }
+        next()
+      })
+      .catch(err => {
+        console.log(err.message);
+      })
+  }
+
+  if (to.fullPath == "/punchline") {
+    Axios
+      .post(ip + "/ki-video/video/punchline")
+      .then(function (response){
+        let res = JSON.parse(JSON.stringify(response));
+        if (res.data.code == 200) {
+          sessionStorage.setItem("punchline", JSON.stringify(res.data.data));
+        }
+        next();
+      })
+      .catch(err => {
+        console.log(err.message);
+      })
+  }
+
+  if (to.fullPath == "/playlet") {
+    Axios
+      .post(ip + "/ki-video/video/young")
+      .then(function (response){
+        let res = JSON.parse(JSON.stringify(response));
+        if (res.data.code == 200) {
+          sessionStorage.setItem("playlet", JSON.stringify(res.data.data));
+        }
+        else {
+          console.log(res.data.msg);
+        }
+        next();
+      })
+      .catch(err => {
+        console.log(err.message);
+      })
+  }
+
+  if (to.fullPath == "/fashion") {
+    Axios
+      .post(ip + "/ki-video/video/fashion")
+      .then(function (response){
+        let res = JSON.parse(JSON.stringify(response))
+        if (res.data.code == 200) {
+          sessionStorage.setItem("fashion", JSON.stringify(res.data.data));
+        }
+        next();
+      })
+      .catch(err => {
+        console.log(err.message);
+      })
+  }
+
   Axios
     .get("../../../static/data/data.json")
     .then(response => {

@@ -1,7 +1,7 @@
 <template>
   <div class="today-page">
     <div class="header">
-      <homeheader :scroll="true" :style_shade="true" :activeitem="activeitem" :data="bgdata"></homeheader>
+      <homeheader :scroll="true" :style_shade="true" :activeitem="activeitem"></homeheader>
       <hottags :tags="data.tags_data"></hottags>
     </div>
     <div class="container">
@@ -25,14 +25,11 @@ export default {
   data() {
     return {
       activeitem: ["", true, "", "", "", ""],
-      bgdata: this.$store.state.webData.background.data,
       data: this.$store.state.webData.hithot,
       module_data_2: this.$store.state.webData.module_data_2,
       module_data_3: this.$store.state.webData.module_data_3
     };
   },
-  created() {},
-  mounted() {},
   destroyed() {},
   methods: {}
 };

@@ -46,7 +46,7 @@ export default {
           {
             withCredentials: false,
             type: obj.type,
-            src: obj.video_url
+            src: obj.videoUrl
           }
         ]
       };

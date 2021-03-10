@@ -18,7 +18,13 @@ const store = new Vuex.Store({
       user: JSON.parse(localStorage.getItem("user")),
       ip:"http://172.16.75.32:8080"
     },
-    webData: {}
+    webData: {
+    },
+    networkData: {
+      marquee:Array,
+      homePage:sessionStorage.getItem("homePage"),
+      punchline:sessionStorage.getItem("punchline")
+    }
   },
   mutations: {
   }

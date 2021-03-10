@@ -1,7 +1,7 @@
 <template>
   <div class="home-page">
     <div class="header">
-      <homeheader :scroll="true" :style_shade="true" :activeitem="activeitem" :data="bgdata"></homeheader>
+      <homeheader :scroll="true" :style_shade="true" :activeitem="activeitem"></homeheader>
     </div>
     <div class="container">
       <div class="left"></div>
@@ -29,16 +29,18 @@ export default {
     return {
       activeitem: [true,"","","","",""],
       scroll: 0,
-      bgdata: this.$store.state.webData.background.data,
-      module_data_10: this.$store.state.webData.module_data_10,
-      module_data_2: this.$store.state.webData.module_data_2,
-      module_data_3: this.$store.state.webData.module_data_3,
-      module_data_5: this.$store.state.webData.module_data_5
+      module_data_10: Object,
+      module_data_2: Object,
+      module_data_3: Object,
+      module_data_5: Object
     };
   },
   created() {
-    //console.log(this.$store.state.webData.background.data);
-    //console.log(this.data);
+    let homePage = JSON.parse(sessionStorage.getItem("homePage"));
+    this.module_data_10 = homePage[0];
+    this.module_data_2 = homePage[2];
+    this.module_data_3 = homePage[1];
+    this.module_data_5 = homePage[3];
   },
   mounted() {
   },

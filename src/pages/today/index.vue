@@ -2,14 +2,15 @@
   <div class="today-page">
     <div class="header">
       <homeheader :scroll="true" :style_shade="true" :activeitem="activeitem"></homeheader>
-      <hottags :tags="data.tags_data"></hottags>
+      <hottags :tags="data.tagList"></hottags>
     </div>
     <div class="container">
       <div class="left"></div>
       <div class="right"></div>
       <div class="main">
-        <frame :data="module_data_2" :limit="14">
-        <frame :data="module_data_3" :limit="14">
+        <frame v-for="category in data.videoCategoryList" :key="category.id" :data="category" :limit="14"></frame>
+<!--        <frame :data="module_data_2" :limit="14">-->
+<!--        <frame :data="module_data_3" :limit="14">-->
       </div>
     </div>
     <div class="footer">
@@ -25,9 +26,7 @@ export default {
   data() {
     return {
       activeitem: ["", true, "", "", "", ""],
-      data: this.$store.state.webData.hithot,
-      module_data_2: this.$store.state.webData.module_data_2,
-      module_data_3: this.$store.state.webData.module_data_3
+      data: this.$store.state.networkData.today,
     };
   },
   destroyed() {},

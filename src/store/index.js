@@ -21,9 +21,8 @@ const store = new Vuex.Store({
     webData: {
     },
     networkData: {
-      marquee:Array,
-      homePage:sessionStorage.getItem("homePage"),
-      punchline:sessionStorage.getItem("punchline")
+      punchline:Object,
+      today:Object
     }
   },
   mutations: {

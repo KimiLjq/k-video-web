@@ -133,8 +133,6 @@ export default {
     };
   },
   created() {
-    console.log("headheader");
-    console.log("**********************"+this.data);
     this.items.forEach(item => {
       this.$set(item, "actived", false);
     });

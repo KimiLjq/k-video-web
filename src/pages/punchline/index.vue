@@ -23,11 +23,14 @@ export default {
   data() {
     return {
       activeitem: ["", "", "", "", true, ""],
-      module_data_4: JSON.parse(sessionStorage.getItem("punchline"))
+      module_data_4: this.$store.state.networkData.punchline
     };
   },
   created() {},
-  methods: {}
+  mounted() {
+  },
+  methods: {
+  }
 };
 </script>
 

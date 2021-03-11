@@ -80,6 +80,8 @@ router.beforeEach((to, from, next) => {
       .then(function (response){
         let res = JSON.parse(JSON.stringify(response));
         if (res.data.code == 200) {
+          console.log("homePage");
+          console.log(res.data.data);
           sessionStorage.setItem("homePage", JSON.stringify(res.data.data));
         }
         next()
@@ -95,7 +97,9 @@ router.beforeEach((to, from, next) => {
       .then(function (response){
         let res = JSON.parse(JSON.stringify(response));
         if (res.data.code == 200) {
-          sessionStorage.setItem("punchline", JSON.stringify(res.data.data));
+          console.log("punchline");
+          console.log(res.data.data);
+          store.state.networkData.punchline = res.data.data;
         }
         next();
       })
@@ -110,6 +114,8 @@ router.beforeEach((to, from, next) => {
       .then(function (response){
         let res = JSON.parse(JSON.stringify(response));
         if (res.data.code == 200) {
+          console.log("playlet");
+          console.log(res.data.data);
           sessionStorage.setItem("playlet", JSON.stringify(res.data.data));
         }
         else {
@@ -128,7 +134,26 @@ router.beforeEach((to, from, next) => {
       .then(function (response){
         let res = JSON.parse(JSON.stringify(response))
         if (res.data.code == 200) {
+          console.log("fashion");
+          console.log(res.data.data);
           sessionStorage.setItem("fashion", JSON.stringify(res.data.data));
+        }
+        next();
+      })
+      .catch(err => {
+        console.log(err.message);
+      })
+  }
+
+  if (to.fullPath == "/today") {
+    Axios
+      .post(ip + "/ki-video/video/today")
+      .then(function (response){
+        let res = JSON.parse(JSON.stringify(response))
+        if (res.data.code == 200) {
+          console.log("today");
+          console.log(res.data.data);
+          store.state.networkData.today = res.data.data;
         }
         next();
       })

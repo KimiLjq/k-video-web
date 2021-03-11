@@ -13,7 +13,7 @@
         @mouseout="mouseOut(item.id)"
       >
         <a>
-          <span v-bind:class="{'tags-selected':(isHoverId == item.id)}">{{item.name}}</span>
+          <span v-bind:class="{'tags-selected':(isHoverId == item.id)}">{{item.content}}</span>
         </a>
       </li>
     </ul>
@@ -39,12 +39,26 @@ export default {
       this.isHoverId = 0;
     },
     linkToIndex(d) {
-      this.$router.push({
-        path: "/index",
-        query: { data: d }
-      });
+      let that = this;
+      this.$axios.post(
+        this.$store.state.property.ip + "/ki-video/video/hotTag",
+        that.$qs.stringify({
+          hotTag: d.content
+        })
+      ).then(function (response) {
+        let res = JSON.parse(JSON.stringify(response));
+        console.log("hotTag");
+        console.log(res.data.data);
+        if (res.data.code == 200) {
+          that.$router.push({
+            path: "/index",
+            query: { data: res.data.data }
+          });
+        }
+      })
     }
-  }
+  },
+
 };
 </script>
 

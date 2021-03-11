@@ -9,9 +9,9 @@
         :activeitem="activeitem"
       ></navbar>
       <div class="index-title">
-        <p v-if="!data.isMulti">{{data.title}}</p>
-        <el-breadcrumb separator="/" v-if="data.isMulti">
-          <el-breadcrumb-item v-for="tags in data.data" :key="tags.id">
+        <p v-if="!data.multi">{{data.title}}</p>
+        <el-breadcrumb separator="/" v-if="data.multi">
+          <el-breadcrumb-item v-for="tags in data.dataList" :key="tags.id">
             <a @click="switchTags(tags.title)" class="index-tags-link" v-bind:class="{'actived-el-breadcrumb__item':(activeName == tags.title)}">{{tags.title}}</a>
           </el-breadcrumb-item>
         </el-breadcrumb>
@@ -20,7 +20,7 @@
     <div class="container">
       <div class="left"></div>
       <div class="right"></div>
-      <div class="main" v-if="!data.isMulti">
+      <div class="main" v-if="!data.multi">
         <div class="items-row">
           <items v-for="item in data.data" :key="item.id" :data="item"></items>
         </div>
@@ -31,14 +31,14 @@
             :current-page="currentPage1"
             :page-size="35"
             layout="total, prev, pager, next, jumper"
-            :total="35"
+            :total="data.data.length"
           ></el-pagination>
         </div>
       </div>
-      <div class="main" v-if="data.isMulti">
+      <div class="main" v-if="data.multi">
         <el-tabs v-model="activeName">
           <el-tab-pane
-            v-for="tags in data.data"
+            v-for="tags in data.dataList"
             :key="tags.id"
             :name="tags.title"
             :label="tags.title"
@@ -53,7 +53,7 @@
                 :current-page="currentPage1"
                 :page-size="35"
                 layout="total, prev, pager, next, jumper"
-                :total="data.data.length"
+                :total="tags.data.length"
               ></el-pagination>
             </div>
           </el-tab-pane>
@@ -79,15 +79,18 @@ export default {
       currentPage1: 1
     };
   },
-  created() {},
+  created() {
+  },
   mounted() {
     this.data = this.$route.query.data;
+    console.log("index");
+    console.log(this.data);
     if (this.data == {}) {
       this.data = JSON.parse(localStorage.getItem("shotcut_indexData"));
     } else {
       localStorage.setItem("shotcut_indexData", JSON.stringify(this.data));
     }
-    this.activeName = this.data.data[0].title;
+    this.activeName = this.data.dataList[0].title;
     console.log(this.data);
   },
   destroyed() {},

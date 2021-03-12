@@ -2,10 +2,10 @@
   <div class="subComment">
     <img class="comment-profile" alt="profile" src="../../assets/profilephoto.png" @click="linkToPersonal(user)">
     <div class="comment-info">
-      <a class="comment-username" @click="linkToPersonal(user)">{{data.replier}} 回复 {{data.atName}}</a>
+      <a class="comment-username" @click="linkToPersonal(user)">{{data.fromUsername}} 回复 {{data.toUsername}}</a>
       <p>{{data.content}}</p>
       <div class="info">
-        <span>{{data.date}}</span>
+        <span>{{data.createTime}}</span>
         <a class="" @click="reply()">
           <span>回复</span>
         </a>
@@ -27,7 +27,12 @@ export default {
     },
 
     reply() {
-      this.$emit('changeInputAreaState', true, this.data.replier);
+      if (localStorage.isLogin) {
+        this.$emit('changeInputAreaState', true, this.data.fromUsername);
+      }
+      else {
+        alert("未登录无法评论噢，快去登录吧")
+      }
     }
   }
 }
@@ -51,6 +56,7 @@ export default {
     height: 24px;
     margin-top: 1px;
     border-radius: 50%;
+    cursor: pointer;
   }
 
   .comment-info {

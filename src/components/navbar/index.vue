@@ -212,8 +212,6 @@ export default {
       }
     },
     getPersonal() {
-      console.log("this.$store.state.property.isLogin" + this.$store.state.property.isLogin);
-      console.log("11111:   ", this.avatar)
       if (!this.$store.state.property.isLogin) {
         let loginIndex =this.$router.resolve({
           path: '/login',
@@ -245,8 +243,6 @@ export default {
       localStorage.isLogin = "false";
       this.$store.state.property.isLogin = false;
       this.$store.state.property.user = null;
-      localStorage.username = "";
-      localStorage.userToken = "";
     }
   },
   computed: {

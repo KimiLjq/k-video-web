@@ -60,7 +60,7 @@
       <div class="main">
         <el-row>
           <el-col :span="18">
-            <discuss></discuss>
+            <discuss :video-data="this.videoData" :comment-data="this.commentData"></discuss>
           </el-col>
           <el-col :span="6">
             <recommend :data="rcData" @changeVideoData="changeVideoData"></recommend>
@@ -94,6 +94,7 @@ export default {
       activeitem: ["", "", "", "", "", "", ""],
       rcData: this.$store.state.webData.RecommendedVideos.data,
       videoData: {},
+      commentData: Array,
       isReload: true,
       playerOptions: {
         // videojs options
@@ -122,12 +123,25 @@ export default {
   created() {},
   mounted() {
     this.videoData = this.$route.query.data;
-    console.log(this.videoData);
     if (this.videoData == {}) {
       this.videoData = JSON.parse(localStorage.getItem("shotcut_videoData"));
     } else {
       localStorage.setItem("shotcut_videoData", JSON.stringify(this.videoData));
     }
+
+    let that = this;
+    this.$axios.post(
+      that.$store.state.property.ip + "/ki-video/comment/getComments",
+      that.$qs.stringify({
+        videoId:that.videoData.id
+      })
+    ).then(function (response) {
+      let res = JSON.parse(JSON.stringify(response));
+      if (res.data.code == 200) {
+        that.commentData = res.data.data;
+      }
+    })
+
     this.title = this.videoData.title;
     // if (this.title.length > 12) {
     //   this.title = this.title.slice(0, 12) + "...";

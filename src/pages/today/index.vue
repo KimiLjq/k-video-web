@@ -23,6 +23,7 @@
 <script>
 export default {
   components: {},
+  inject: ["reload"],
   data() {
     return {
       activeitem: ["", true, "", "", "", ""],

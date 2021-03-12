@@ -32,18 +32,20 @@ Vue.directive('title', {
 })
 
 Axios.interceptors.request.use(config => {
-  config.headers.token = localStorage.userToken;
+  if (localStorage.getItem("user")) {
+    config.headers.token = JSON.parse(localStorage.getItem("user")).userToken;
+  }
   return config;
 })
 
 router.beforeEach((to, from, next) => {
-  console.log("from Route:"+from.fullPath);
   let ip = "http://172.16.75.32:8080/"
-  if (localStorage.username && localStorage.userToken && from.fullPath == "/" && to.fullPath == "/") {
+  if (localStorage.getItem("user") && from.fullPath == "/" && to.fullPath == "/") {
     console.log("autoLogin");
+    let user = JSON.parse(localStorage.getItem("user"));
     Axios
       .post(ip + "ki-video/user/autoLogin", qs.stringify({
-        username : localStorage.username,
+        username : user.username,
       }))
       .then(function (response) {
         let res = JSON.parse(JSON.stringify(response));

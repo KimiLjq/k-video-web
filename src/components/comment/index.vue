@@ -7,10 +7,10 @@
 <!--      <a class="comment-username" @click="linkToPersonal(user)">{{user.username}}</a>-->
 <!--      <p>{{data.comment}}</p>-->
       <div class="comment-info">
-        <a class="comment-username" @click="linkToPersonal()">{{data.name}}</a>
-        <p>{{data.content}}</p>
+        <a class="comment-username" @click="linkToPersonal()">{{data.firstComment.fromUsername}}</a>
+        <p>{{data.firstComment.content}}</p>
         <div class="info">
-          <span>{{data.date}}</span>
+          <span>{{data.firstComment.createTime}}</span>
           <a class="" @click="reply()">
             <span>回复</span>
           </a>
@@ -19,7 +19,7 @@
     </div>
     <sub-comment
       @changeInputAreaState="changeInputAreaState"
-      v-for="item in subCommentList"
+      v-for="item in data.secondComment"
       :key="item.id"
       :data="item"
     ></sub-comment>
@@ -46,8 +46,8 @@ import utils from "../../../static/utils/utils";
 export default {
   name: "comment",
   props: {
+    videoData: Object,
     data: Object,
-    replies: Array
   },
   data() {
     return {
@@ -72,16 +72,27 @@ export default {
     },
 
     reply() {
-      this.holder = "@" + this.data.name;
-      this.isShowInputArea = true;
+      if (localStorage.isLogin == "true") {
+        this.holder = "@" + this.data.firstComment.fromUsername;
+        this.isShowInputArea = true;
+      }
+      else {
+        alert("未登录无法评论噢，快去登录吧")
+      }
     },
 
     postComment() {
-      let subComment = {id: this.subCommentList.length+1, replier: this.$store.state.property.user.username, atName: this.data.name, content: this.inputtext, date: utils.getNowTime()};
-      this.subCommentList.push(subComment);
-      console.log(subComment);
-      this.inputtext = "";
-      this.isShowInputArea = false;
+      if (localStorage.isLogin == "true") {
+
+        let subComment = {id: this.subCommentList.length+1, replier: this.$store.state.property.user.username, atName: this.data.name, content: this.inputtext, date: utils.getNowTime()};
+        this.subCommentList.push(subComment);
+        console.log(subComment);
+        this.inputtext = "";
+        this.isShowInputArea = false;
+      }
+      else {
+        alert("未登录无法评论噢，快去登录吧")
+      }
     },
 
     changeInputAreaState(isShowInputArea, name) {
@@ -133,6 +144,7 @@ export default {
       width: 48px;
       height: 48px;
       border-radius: 50%;
+      cursor: pointer;
     }
 
     .comment-info {

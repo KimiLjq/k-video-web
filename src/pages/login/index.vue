@@ -86,12 +86,9 @@ export default {
       ).then(function (response){
         let res = JSON.parse(JSON.stringify(response));
         if (res.data.code == 200) {
-          console.log(res.data.data.userToken);
-          localStorage.username = res.data.data.username;
-          localStorage.userToken = res.data.data.userToken;
           localStorage.isLogin = "true";
           let user = JSON.stringify(res.data.data);
-          localStorage.setItem("user", [user]);
+          localStorage.setItem("user", user);
           that.$store.state.property.isLogin = true;
           that.$store.state.property.user = res.data.data;
           that.$router.push({path:"/"});

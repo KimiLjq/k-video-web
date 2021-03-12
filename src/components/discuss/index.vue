@@ -34,12 +34,12 @@
       ></el-input>
     </div>
     <el-button class="discuss-btn" size="mini" v-show="isNotEmpty" @click="postComment()" round>发布评论</el-button>
-<!--    <div class="discuss-details" v-show="!isNotEmpty">-->
-<!--      <p>暂无评论</p>-->
+<!--    <div class="discuss-details" v-show="!haveComment">-->
+<!--      <p>暂无评论，快参与评论吧</p>-->
 <!--    </div>-->
     <div class="items-right-row">
       <comment class="discuss-content"
-        v-for="item in commentList"
+        v-for="item in commentData"
         :key="item.id"
         :data="item"
       >
@@ -53,7 +53,10 @@ import utils from "../../../static/utils/utils";
 
 export default {
   name: "discuss",
-  props: {},
+  props: {
+    videoData: Object,
+    commentData: Array
+  },
   data() {
     return {
       inputtext: "",
@@ -64,16 +67,39 @@ export default {
       ]
     };
   },
+  mounted() {
+  },
   methods: {
     setLoginStatus() {
       this.$router.push({path:"/login"})
     },
 
     postComment() {
-      this.isNotEmpty = true;
-      console.log(this.inputtext);
-      let comment = {id: this.commentList.length+1, name: "kimi", content: this.inputtext, date: utils.getNowTime()};
-      this.commentList.unshift(comment);
+      console.log("videoData");
+      console.log(this.videoData);
+      if (localStorage.isLogin) {
+        let that = this;
+        this.$axios.post(
+          that.$store.state.property.ip + "/ki-video/comment/postComment",
+          this.$qs.stringify({
+            fromUsername: that.$store.state.property.user.username,
+            fromUserAvatar: that.$store.state.property.user.avatarUrl,
+            videoId: that.videoData.id,
+            content: that.inputtext
+          })
+        ).then(function (response) {
+          let res = JSON.parse(JSON.stringify(response));
+          if (res.data.code == 200) {
+            let webComment = JSON.parse(JSON.stringify(res.data.data));
+            // let comment = {id: webComment.commentId, name: webComment.fromUsername, content: webComment.content, date: utils.getNowTime()}
+            // that.commentList.unshift(comment);
+            that.commentData.unshift(webComment);
+          }
+        })
+      }
+      else {
+        alert("未登录无法评论噢，快去登录吧")
+      }
       this.inputtext = "";
     }
   },

@@ -39,9 +39,11 @@ export default {
   methods: {
     linkToPlayer(obj) {
       let testData = {
+        id: obj.id,
         title: obj.title,
         poster: obj.poster,
         amount: obj.amount,
+        createTime: obj.createTime,
         source: [
           {
             withCredentials: false,

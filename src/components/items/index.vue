@@ -59,6 +59,7 @@ export default {
         title: obj.title,
         poster: obj.poster,
         amount: obj.amount,
+        firstType: obj.firstType,
         createTime: obj.createTime,
         source: [
           {
@@ -70,7 +71,7 @@ export default {
       };
       this.$router.push({
         path: "/player",
-        query: { data: testData }
+        query: { data: JSON.stringify(testData) }
       });
     }
   },

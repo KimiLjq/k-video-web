@@ -142,7 +142,6 @@ export default {
     }
 
     if (this.$store.state.property.user) {
-      console.log("this.$store.state.property.ip + this.$store.state.property.user.avatarUrl :" + this.$store.state.property.ip + this.$store.state.property.user.avatarUrl);
       this.avatar = this.$store.state.property.ip + this.$store.state.property.user.avatarUrl;
     }
 
@@ -240,6 +239,7 @@ export default {
       console.log("退出登录");
       this.avatar = this.$store.state.property.ip + "/ki-video/user/avatar/unLogin-avatar.png";
       localStorage.removeItem("user");
+      localStorage.removeItem("userToken");
       localStorage.isLogin = "false";
       this.$store.state.property.isLogin = false;
       this.$store.state.property.user = null;

@@ -1,6 +1,6 @@
 <template>
   <div class="subComment">
-    <img class="comment-profile" alt="profile" src="../../assets/profilephoto.png" @click="linkToPersonal(user)">
+    <img class="comment-profile" alt="profile" :src="data.fromUserAvatar" @click="linkToPersonal(user)">
     <div class="comment-info">
       <a class="comment-username" @click="linkToPersonal(user)">{{data.fromUsername}} 回复 {{data.toUsername}}</a>
       <p>{{data.content}}</p>

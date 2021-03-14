@@ -32,8 +32,9 @@ Vue.directive('title', {
 })
 
 Axios.interceptors.request.use(config => {
-  if (localStorage.getItem("user")) {
-    config.headers.token = JSON.parse(localStorage.getItem("user")).userToken;
+  if (localStorage.getItem("userToken")) {
+    config.headers.token = localStorage.getItem("userToken");
+    // console.log(config.headers.token);
   }
   return config;
 })
@@ -51,15 +52,25 @@ router.beforeEach((to, from, next) => {
         let res = JSON.parse(JSON.stringify(response));
         console.log(res);
         if (res.data.code == 200) {
+          console.log("autoLogin success");
           localStorage.isLogin = "true";
           let user = JSON.stringify(res.data.data);
-          localStorage.setItem("user", [user]);
+          localStorage.setItem("user", user);
           store.state.property.isLogin = true;
           store.state.property.user = res.data.data;
         }
         else {
+          console.log("autoLogin failure");
           localStorage.isLogin = "false";
+          store.state.property.isLogin = false;
+          store.state.property.user = null;
         }
+      })
+      .catch(err => {
+        localStorage.isLogin = "false";
+        store.state.property.isLogin = false;
+        store.state.property.user = null;
+        console.log(err.message);
       })
   };
 

@@ -3,7 +3,7 @@
     <div class="line">
     </div>
     <div class="con">
-      <img class="comment-profile" alt="profile" src="../../assets/profilephoto.png" @click="linkToPersonal(user)">
+      <img class="comment-profile" alt="profile" :src="data.firstComment.fromUserAvatar" @click="linkToPersonal(user)">
 <!--      <a class="comment-username" @click="linkToPersonal(user)">{{user.username}}</a>-->
 <!--      <p>{{data.comment}}</p>-->
       <div class="comment-info">
@@ -55,9 +55,10 @@ export default {
       inputtext: "",
       isNotEmpty: false,
       isShowInputArea: false,
+      toUserName: "",
       subCommentList:[
-        {id: '1', replier: 'jay', atName: 'kimi', content: '童年的纸飞机', date: utils.getNowTime()},
-        {id: '2', replier: 'lulu', atName:'zhou', content: '但偏偏雨渐渐', date: utils.getNowTime()}
+        // {id: '1', replier: 'jay', atName: 'kimi', content: '童年的纸飞机', date: utils.getNowTime()},
+        // {id: '2', replier: 'lulu', atName:'zhou', content: '但偏偏雨渐渐', date: utils.getNowTime()}
       ]
     }
   },
@@ -75,6 +76,7 @@ export default {
       if (localStorage.isLogin == "true") {
         this.holder = "@" + this.data.firstComment.fromUsername;
         this.isShowInputArea = true;
+        this.toUserName = this.data.firstComment.fromUsername;
       }
       else {
         alert("未登录无法评论噢，快去登录吧")
@@ -82,11 +84,28 @@ export default {
     },
 
     postComment() {
+      console.log("comment: "+this.toUserName);
       if (localStorage.isLogin == "true") {
-
-        let subComment = {id: this.subCommentList.length+1, replier: this.$store.state.property.user.username, atName: this.data.name, content: this.inputtext, date: utils.getNowTime()};
-        this.subCommentList.push(subComment);
-        console.log(subComment);
+        let that = this;
+        this.$axios.post(
+          that.$store.state.property.ip + "/ki-video/comment/postComment",
+          this.$qs.stringify({
+            fromUsername: that.$store.state.property.user.username,
+            toUsername: that.toUserName,
+            fromUserAvatar: that.$store.state.property.user.avatarUrl,
+            videoId: that.data.firstComment.videoId,
+            fatherCommentId: that.data.firstComment.commentId,
+            content: that.inputtext
+          })
+        ).then(function (response) {
+          let res = JSON.parse(JSON.stringify(response));
+          if (res.data.code == 200) {
+            let webComment = JSON.parse(JSON.stringify(res.data.data));
+            console.log("secondComment");
+            console.log(res.data.data);
+            that.data.secondComment.push(webComment.firstComment);
+          }
+        })
         this.inputtext = "";
         this.isShowInputArea = false;
       }
@@ -98,6 +117,8 @@ export default {
     changeInputAreaState(isShowInputArea, name) {
       this.isShowInputArea = isShowInputArea;
       this.holder = "@"+name;
+      this.toUserName = name;
+      console.log(this.toUserName)
     }
   },
 

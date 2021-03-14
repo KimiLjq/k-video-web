@@ -26,25 +26,37 @@ export default {
   data() {
     return {};
   },
+  watch:{
+    $route:function (e){
+      console.log("aaaaaaaaaaa", e)
+    }
+  },
   methods: {
     linkToPlayer(obj) {
-      console.log(obj.id);
+      console.log(obj.title);
       let recommendData = {
+        id: obj.id,
         title: obj.title,
         poster: obj.poster,
         amount: obj.amount,
+        firstType: obj.firstType,
+        createTime: obj.createTime,
         source: [
           {
             withCredentials: false,
             type: obj.type,
-            src: obj.video_url
+            src: obj.videoUrl
           }
         ]
       };
-      localStorage.setItem("shotcut_videoData", JSON.stringify(recommendData));
-      //this.$router.go(0);
-      this.$emit("changeVideoData", recommendData);
-      window.scrollTo(0, 0);
+      this.$router.push({
+        path: "/player",
+        query: { data: JSON.stringify(recommendData)}
+      });
+      // localStorage.setItem("shotcut_videoData", JSON.stringify(recommendData));
+      // //this.$router.go(0);
+      // this.$emit("changeVideoData", recommendData);
+      // window.scrollTo(0, 0);
     }
   }
 };

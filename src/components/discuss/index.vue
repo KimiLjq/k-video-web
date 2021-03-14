@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="discuss-input" v-if="getLoginState">
-      <img class="discuss-input-profile" alt="profile" src="../../assets/profilephoto.png">
+      <img class="discuss-input-profile" alt="profile" :src="avatar">
       <el-input
         type="textarea"
         class="discuss-input-inputarea"
@@ -61,10 +61,7 @@ export default {
     return {
       inputtext: "",
       isNotEmpty: false,
-      commentList:[
-        {id: '1', name: 'kimi', content: '故事的小黄花', date: utils.getNowTime()},
-        {id: '2', name: 'zhou', content: '从出生那年就飘着', date: utils.getNowTime()}
-      ]
+      avatar: this.$store.state.property.user.avatarUrl
     };
   },
   mounted() {
@@ -75,9 +72,7 @@ export default {
     },
 
     postComment() {
-      console.log("videoData");
-      console.log(this.videoData);
-      if (localStorage.isLogin) {
+      if (localStorage.isLogin == "true") {
         let that = this;
         this.$axios.post(
           that.$store.state.property.ip + "/ki-video/comment/postComment",

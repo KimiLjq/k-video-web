@@ -40,7 +40,7 @@
 <!--        <el-button @click="getPersonal()" circle>-->
 <!--          <i class="icon-user"></i>-->
 <!--        </el-button>-->
-        <div v-show="!getLoginState">
+        <div v-show="!loginStatus">
           <a @click="getPersonal()">
             <span style="margin-left: 20px">登录</span>
           </a>
@@ -49,9 +49,9 @@
             <span>注册</span>
           </a>
         </div>
-        <div v-show="getLoginState">
+        <div v-show="loginStatus">
           <a @click="getPersonal()">
-            <span style="margin-left: 20px">{{ getUsername }}</span>
+            <span style="margin-left: 20px">{{ username }}</span>
           </a>
           <span style="margin-right: 5px; margin-left: 5px">|</span>
           <a @click="logout()">
@@ -107,6 +107,7 @@ export default {
     style_shade: Boolean, //背景渐变
     scroll: Boolean, //滚动响应
     extend: Boolean, //扩展型
+    personUsername: "", //个人页用户名
     search: {
       type: Boolean,
       default: true
@@ -122,11 +123,14 @@ export default {
       btn_visiable: this.btn_v,
       shade_visiable: this.style_shade,
       btn_selected: false,
+      loginStatus: false,
       keyWord: ""
     };
   },
   created() {},
   mounted() {
+    document.addEventListener('visibilitychange', this.handleVisiable);
+    this.loginStatus = localStorage.isLogin == "true" ? true : false;
     console.log(this.scroll);
     if (this.scroll) {
       this.menu_visiable = true;
@@ -137,12 +141,10 @@ export default {
       this.btn_visiable = true;
     }
 
-    if (this.$store.state.property.user) {
-      this.username = this.$store.state.property.user.username;
-    }
-
-    if (this.$store.state.property.user) {
-      this.avatar = this.$store.state.property.ip + this.$store.state.property.user.avatarUrl;
+    if (localStorage.isLogin && localStorage.getItem("user")) {
+      let user = JSON.parse(localStorage.getItem("user"));
+      this.username = user.username;
+      this.avatar = this.$store.state.property.ip + user.avatarUrl;
     }
 
     if (this.extend) {
@@ -154,6 +156,7 @@ export default {
     if (this.scroll) {
       window.removeEventListener("scroll", this.handleScroll);
     }
+    document.removeEventListener('visibilitychange',this.handleVisiable)
   },
   methods: {
     linkTo(path) {
@@ -211,7 +214,7 @@ export default {
       }
     },
     getPersonal() {
-      if (!this.$store.state.property.isLogin) {
+      if (!this.loginStatus) {
         let loginIndex =this.$router.resolve({
           path: '/login',
         })
@@ -222,6 +225,7 @@ export default {
       else {
         let personIndex = this.$router.resolve({
           path: '/person',
+          query: { username : this.username}
         });
 
         console.log("toPerson");
@@ -237,32 +241,40 @@ export default {
     },
     logout() {
       console.log("退出登录");
+      console.log(this.$route);
+      if (this.$route.name == "person" && this.personUsername == JSON.parse(localStorage.getItem("user")).username) {
+        this.$router.push({path: "/"});
+      }
+
       this.avatar = this.$store.state.property.ip + "/ki-video/user/avatar/unLogin-avatar.png";
       localStorage.removeItem("user");
       localStorage.removeItem("userToken");
       localStorage.isLogin = "false";
-      this.$store.state.property.isLogin = false;
-      this.$store.state.property.user = null;
-    }
-  },
-  computed: {
-    getLoginState() {
-      return this.$store.state.property.isLogin;
+      this.loginStatus = false
+      this.username = null;
     },
-    getUsername() {
-      if (this.$store.state.property.user) {
-        return this.$store.state.property.user.username;
+    handleVisiable(e) {
+      if (e.target.visibilityState === 'visible') {
+        this.loginStatus = localStorage.isLogin == "true" ? true : false;
+
+        if (this.loginStatus) {
+          let user = JSON.parse(localStorage.getItem("user"));
+          this.avatar = this.$store.state.property.ip + user.avatarUrl;
+          this.username = user.username
+        }
+        else {
+          this.avatar = this.$store.state.property.ip + "/ki-video/user/avatar/unLogin-avatar.png";
+        }
       }
-      return "";
     }
   },
-  watch: {
-    activeitemid(activeitemid) {
-      if (activeitemid) {
-        this.item[activeitemid] = true;
-      }
-    }
-  }
+  // watch: {
+  //   activeitemid(activeitemid) {
+  //     if (activeitemid) {
+  //       this.item[activeitemid] = true;
+  //     }
+  //   }
+  // }
 };
 </script>
 

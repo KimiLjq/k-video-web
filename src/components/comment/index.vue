@@ -3,11 +3,11 @@
     <div class="line">
     </div>
     <div class="con">
-      <img class="comment-profile" alt="profile" :src="data.firstComment.fromUserAvatar" @click="linkToPersonal(user)">
+      <img class="comment-profile" alt="profile" :src="data.firstComment.fromUserAvatar" @click="linkToPersonal(data.firstComment.fromUsername)">
 <!--      <a class="comment-username" @click="linkToPersonal(user)">{{user.username}}</a>-->
 <!--      <p>{{data.comment}}</p>-->
       <div class="comment-info">
-        <a class="comment-username" @click="linkToPersonal()">{{data.firstComment.fromUsername}}</a>
+        <a class="comment-username" @click="linkToPersonal(data.firstComment.fromUsername)">{{data.firstComment.fromUsername}}</a>
         <p>{{data.firstComment.content}}</p>
         <div class="info">
           <span>{{data.firstComment.createTime}}</span>
@@ -63,10 +63,10 @@ export default {
     }
   },
   methods: {
-    linkToPersonal(user) {
+    linkToPersonal(username) {
       let personalIndex = this.$router.resolve({
-        path: '/personal',
-        query: {data: user}
+        path: '/person',
+        query: {username: username}
       });
 
       window.open(personalIndex.href, '_blank');

@@ -56,19 +56,16 @@ router.beforeEach((to, from, next) => {
           localStorage.isLogin = "true";
           let user = JSON.stringify(res.data.data);
           localStorage.setItem("user", user);
-          store.state.property.isLogin = true;
           store.state.property.user = res.data.data;
         }
         else {
           console.log("autoLogin failure");
           localStorage.isLogin = "false";
-          store.state.property.isLogin = false;
           store.state.property.user = null;
         }
       })
       .catch(err => {
         localStorage.isLogin = "false";
-        store.state.property.isLogin = false;
         store.state.property.user = null;
         console.log(err.message);
       })

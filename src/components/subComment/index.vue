@@ -1,8 +1,8 @@
 <template>
   <div class="subComment">
-    <img class="comment-profile" alt="profile" :src="data.fromUserAvatar" @click="linkToPersonal(user)">
+    <img class="comment-profile" alt="profile" :src="data.fromUserAvatar" @click="linkToPersonal(data.fromUsername)">
     <div class="comment-info">
-      <a class="comment-username" @click="linkToPersonal(user)">{{data.fromUsername}} 回复 {{data.toUsername}}</a>
+      <a class="comment-username" @click="linkToPersonal(data.fromUsername)">{{data.fromUsername}} 回复 {{data.toUsername}}</a>
       <p>{{data.content}}</p>
       <div class="info">
         <span>{{data.createTime}}</span>
@@ -22,8 +22,13 @@ export default {
     isShowInputArea: false
   },
   methods: {
-    linkToPersonal(user) {
+    linkToPersonal(username) {
+      let personalIndex = this.$router.resolve({
+        path: '/person',
+        query: {username: username}
+      });
 
+      window.open(personalIndex.href, '_blank');
     },
 
     reply() {

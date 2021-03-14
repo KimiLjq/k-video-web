@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import fa from "element-ui/src/locale/lang/fa";
 
 Vue.use(Vuex)
 
@@ -14,7 +15,6 @@ const store = new Vuex.Store({
       date: now
     },
     property: {
-      isLogin: localStorage.isLogin === "true" ? true : false,
       user: JSON.parse(localStorage.getItem("user")),
       ip:"http://172.16.75.32:8080"
     },

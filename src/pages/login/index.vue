@@ -90,7 +90,6 @@ export default {
           let user = JSON.stringify(res.data.data);
           localStorage.setItem("user", user);
           localStorage.setItem("userToken", res.data.data.userToken);
-          that.$store.state.property.isLogin = true;
           that.$store.state.property.user = res.data.data;
           that.$router.push({path:"/"});
         }

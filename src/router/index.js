@@ -32,7 +32,10 @@ export default new Router({
     {
       path: '/today',
       name: 'today',
-      component: resolve => require(['@/pages/today'],resolve)
+      component: resolve => require(['@/pages/today'],resolve),
+      children: [
+
+      ]
     },
     {
       path: '/rank',

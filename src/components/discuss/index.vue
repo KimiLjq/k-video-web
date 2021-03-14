@@ -4,7 +4,7 @@
     <!-- <div class="discuss-void">
       <p>评论功能暂未开放</p>
     </div> -->
-    <div class="discuss-login" v-if="!getLoginState">
+    <div class="discuss-login" v-if="!loginStatus">
       <p>
         点击此处
         <a @click="setLoginStatus()">
@@ -21,7 +21,7 @@
         </a>
       </div>
     </div>
-    <div class="discuss-input" v-if="getLoginState">
+    <div class="discuss-input" v-if="loginStatus">
       <img class="discuss-input-profile" alt="profile" :src="avatar">
       <el-input
         type="textarea"
@@ -61,10 +61,13 @@ export default {
     return {
       inputtext: "",
       isNotEmpty: false,
+      loginStatus: false,
       avatar: this.$store.state.property.user.avatarUrl
     };
   },
   mounted() {
+    document.addEventListener('visibilitychange', this.handleVisiable);
+    this.loginStatus = localStorage.isLogin == "true" ? true : false;
   },
   methods: {
     setLoginStatus() {
@@ -86,8 +89,6 @@ export default {
           let res = JSON.parse(JSON.stringify(response));
           if (res.data.code == 200) {
             let webComment = JSON.parse(JSON.stringify(res.data.data));
-            // let comment = {id: webComment.commentId, name: webComment.fromUsername, content: webComment.content, date: utils.getNowTime()}
-            // that.commentList.unshift(comment);
             that.commentData.unshift(webComment);
           }
         })
@@ -96,12 +97,13 @@ export default {
         alert("未登录无法评论噢，快去登录吧")
       }
       this.inputtext = "";
-    }
-  },
-  computed: {
-    getLoginState() {
-      return this.$store.state.property.isLogin;
     },
+    handleVisiable() {
+      this.loginStatus = localStorage.isLogin == "true" ? true : false;
+      this.$nextTick(() => {
+        console.log(this.loginStatus)
+      })
+    }
   },
   watch: {
     inputtext(inputtext) {
@@ -113,6 +115,9 @@ export default {
       }
     }
   },
+  destroyed() {
+    document.removeEventListener('visibilitychange',this.handleVisiable)
+  }
 };
 </script>
 

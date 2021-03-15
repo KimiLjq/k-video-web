@@ -14,7 +14,7 @@
         <span class="tit" style="font-size: 38px;">注册</span>
       </div>
       <div class="register-container">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="70px" :type="passw">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="70px">
           <el-form-item label="昵称" prop="nickname" class="interval up" >
             <el-input v-model="ruleForm.nickname" class="inputLeft"></el-input>
           </el-form-item>
@@ -89,7 +89,7 @@ export default {
     sub() {
       let that = this;
       this.$axios.post(
-        that.$store.state.property.ip + "/ki-video/user/verificationCode",
+        that.$store.state.property.ip + "/ki-video/loginRegister/verificationCode",
         that.$qs.stringify({
             email : that.ruleForm.email,
             type : 1
@@ -120,7 +120,7 @@ export default {
     register() {
       let that = this;
       this.$axios.post(
-        that.$store.state.property.ip + "/ki-video/user/register",
+        that.$store.state.property.ip + "/ki-video/loginRegister/register",
         that.$qs.stringify({
           username : that.ruleForm.nickname,
           email : that.ruleForm.email,

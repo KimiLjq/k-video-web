@@ -99,7 +99,7 @@ export default {
     getVerification() {
       let that = this;
       this.$axios.post(
-        that.$store.state.property.ip + "/ki-video/user/verificationCode",
+        that.$store.state.property.ip + "/ki-video/loginRegister/verificationCode",
         that.$qs.stringify({
           email : that.ruleForm.email,
           type : 2
@@ -130,7 +130,7 @@ export default {
     sub() {
       let that = this;
       this.$axios.post(
-        that.$store.state.property.ip + "/ki-video/user/resetPassword",
+        that.$store.state.property.ip + "/ki-video/loginRegister/resetPassword",
         that.$qs.stringify({
           email : that.ruleForm.email,
           newPassword : that.ruleForm.password,

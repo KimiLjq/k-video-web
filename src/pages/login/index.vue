@@ -78,7 +78,7 @@ export default {
     sub() {
       let that = this;
       this.$axios.post(
-        that.$store.state.property.ip+"/ki-video/user/login",
+        that.$store.state.property.ip+"/ki-video/loginRegister/login",
         this.$qs.stringify({
             username : that.ruleForm.username,
             password : that.ruleForm.password

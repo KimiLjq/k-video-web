@@ -23,9 +23,13 @@ const store = new Vuex.Store({
     networkData: {
       punchline:Object,
       today:Object
-    }
+    },
+    isLogin: false,
   },
   mutations: {
+    changeLoginStatus (state, status) {
+      state.isLogin = status;
+    }
   }
 });
 

@@ -4,7 +4,7 @@
     <!-- <div class="discuss-void">
       <p>评论功能暂未开放</p>
     </div> -->
-    <div class="discuss-login" v-if="!loginStatus">
+    <div class="discuss-login" v-if="!getLoginStatus">
       <p>
         点击此处
         <a @click="setLoginStatus()">
@@ -21,7 +21,7 @@
         </a>
       </div>
     </div>
-    <div class="discuss-input" v-if="loginStatus">
+    <div class="discuss-input" v-if="getLoginStatus">
       <img class="discuss-input-profile" alt="profile" :src="avatar">
       <el-input
         type="textarea"
@@ -61,17 +61,20 @@ export default {
     return {
       inputtext: "",
       isNotEmpty: false,
-      loginStatus: false,
       avatar: this.$store.state.property.user.avatarUrl
     };
   },
   mounted() {
     document.addEventListener('visibilitychange', this.handleVisiable);
-    this.loginStatus = localStorage.isLogin == "true" ? true : false;
   },
   methods: {
     setLoginStatus() {
-      this.$router.push({path:"/login"})
+      let loginIndex =this.$router.resolve({
+        path: '/login',
+      })
+
+      console.log("toLogin");
+      window.open(loginIndex.href, '_blank');
     },
 
     postComment() {
@@ -99,20 +102,21 @@ export default {
       this.inputtext = "";
     },
     handleVisiable() {
-      this.loginStatus = localStorage.isLogin == "true" ? true : false;
-      this.$nextTick(() => {
-        console.log(this.loginStatus)
-      })
+      this.$store.commit('changeLoginStatus', localStorage.isLogin == "true" ? true : false);
     }
   },
   watch: {
     inputtext(inputtext) {
-      //console.log(inputtext);
       if (inputtext != "") {
         this.isNotEmpty = true;
       } else {
         this.isNotEmpty = false;
       }
+    }
+  },
+  computed: {
+    getLoginStatus() {
+      return this.$store.state.isLogin;
     }
   },
   destroyed() {

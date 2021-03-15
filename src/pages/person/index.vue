@@ -123,7 +123,7 @@ export default {
         that.user = res.data.data;
         that.avatar = that.$store.state.property.ip + that.user.avatarUrl;
         if (that.loginUsername == that.user.username) {
-          localStorage.setItem("user", that.user);
+          localStorage.setItem("user", JSON.stringify(that.user));
         }
       }
     })
@@ -148,8 +148,11 @@ export default {
   },
   watch: {
     loginStatus:function (newVal, oldVal) {
-      if (newVal == false) {
+      if (newVal == false && this.username == this.loginUsername) {
         this.$router.push({path: "/"});
+      }
+      else {
+        this.loginUsername = JSON.parse(localStorage.getItem("user")).username;
       }
     }
   }

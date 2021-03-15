@@ -57,6 +57,7 @@ router.beforeEach((to, from, next) => {
           let user = JSON.stringify(res.data.data);
           localStorage.setItem("user", user);
           store.state.property.user = res.data.data;
+          store.commit('changeLoginStatus', true);
         }
         else {
           console.log("autoLogin failure");

@@ -91,6 +91,7 @@ export default {
           localStorage.setItem("user", user);
           localStorage.setItem("userToken", res.data.data.userToken);
           that.$store.state.property.user = res.data.data;
+          that.$store.commit('changeLoginStatus', true);
           that.$router.push({path:"/"});
         }
         else {

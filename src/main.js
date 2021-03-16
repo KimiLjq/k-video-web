@@ -45,7 +45,7 @@ router.beforeEach((to, from, next) => {
     console.log("autoLogin");
     let user = JSON.parse(localStorage.getItem("user"));
     Axios
-      .post(ip + "ki-video/user/autoLogin", qs.stringify({
+      .post(ip + "ki-video/loginRegister/autoLogin", qs.stringify({
         username : user.username,
       }))
       .then(function (response) {
@@ -61,6 +61,8 @@ router.beforeEach((to, from, next) => {
         }
         else {
           console.log("autoLogin failure");
+          localStorage.removeItem("user");
+          localStorage.removeItem("userToken");
           localStorage.isLogin = "false";
           store.state.property.user = null;
         }

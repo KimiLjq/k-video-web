@@ -141,7 +141,7 @@ export default {
       this.btn_visiable = true;
     }
 
-    if (localStorage.isLogin && localStorage.getItem("user")) {
+    if (localStorage.isLogin == "true" && localStorage.getItem("user")) {
       let user = JSON.parse(localStorage.getItem("user"));
       this.username = user.username;
       this.avatar = this.$store.state.property.ip + user.avatarUrl;
@@ -426,21 +426,19 @@ export default {
     };
     color: #FFFFFF;
 
+    .icon-user {
+      width: 40px;
+      height: 40px;
+      border-radius: 100%;
+      cursor: pointer;
+    }
+
     button {
       width: 40px;
       height: 40px;
       background: rgba(204, 238, 255, 1);
       border-radius: 50%;
       border: 0;
-
-      .icon-user:before {
-        width: 40px;
-        height: 40px;
-        position: relative;
-        top: -12px;
-        left: -12px;
-        cursor: pointer;
-      }
     }
   }
 

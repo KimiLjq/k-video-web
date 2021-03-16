@@ -14,18 +14,23 @@
       <div class="topMargin"></div>
       <div class="top">
         <div class="iconColor"></div>
-        <img class="icon-user" alt="profile" :src="avatar">
+        <div class="headerAvatar">
+          <img class="icon-user" alt="profile" :src="avatar">
+          <input @change="modifyAvatar($event)" ref="file" title='' type="file" accept="image/*" class="hiddenInput"/>
+        </div>
         <div class="info">
           <span style="margin-right: 5px !important;">{{ user.username }}</span>
           <span>({{ user.email }})</span>
+          <input class="introduce" ref="input" v-model="description" @focus="getFocus" @blur="postDescription" type="text" placeholder="编辑个性签名" maxlength="100">
           <div class="other-info">
             <span>作品数：0</span>
             <span>关注数：{{ user.followsCount }}</span>
             <span>粉丝数：{{ user.fansCount }}</span>
             <span>获赞数：{{ user.receiveLikeCount }}</span>
           </div>
+
         </div>
-        <el-button class="discuss-btn" size="mini" @click="postComment()" round>编辑信息</el-button>
+        <el-button class="discuss-btn" size="mini" @click="editMessage()" round>编辑信息</el-button>
       </div>
       <div style="width: 100%; height: 10px"></div>
       <div class="mid">
@@ -96,7 +101,10 @@ export default {
       user:Object,
       loginStatus: false,
       loginUsername: "",
+      oldDescription: "",
+      description: "",
       avatar:"",
+      focusState: false,
       activeitem: ["", "", "", "", "", "", ""],
       item: {0: true, 1: false, 2: false, 3: false, 4: false, length: 5},
       module_data_1: this.$store.state.webData.monthly_rank.module_data_1,
@@ -109,7 +117,6 @@ export default {
       this.loginUsername = JSON.parse(localStorage.getItem("user")).username;
     }
 
-    console.log("person page query username: " + this.$route.query.username);
     this.username = this.$route.query.username;
     let that = this;
     this.$axios.post(
@@ -122,6 +129,7 @@ export default {
       if (res.data.code == 200) {
         that.user = res.data.data;
         that.avatar = that.$store.state.property.ip + that.user.avatarUrl;
+        that.description = that.user.description;
         if (that.loginUsername == that.user.username) {
           localStorage.setItem("user", JSON.stringify(that.user));
         }
@@ -135,6 +143,55 @@ export default {
       }
       this.item[index] = true;
     },
+
+    getFocus() {
+      this.oldDescription = this.description;
+    },
+
+    modifyAvatar: function (e) {
+      let file = e.target.files[0];
+      let that = this;
+      let data = new FormData();
+      data.append("username", that.username);
+      data.append("file", file);
+      let headers = {headers: {"Content-Type": "multipart/form-data"}}
+      this.$axios.post(
+        that.$store.state.property.ip + "/ki-video/user/modifyAvatar",
+        data,
+        headers
+      ).then(function (response) {
+        let res = JSON.parse(JSON.stringify(response));
+        console.log(res.data.data);
+        if (res.data.code == 200) {
+          that.avatar = that.$store.state.property.ip + res.data.data;
+          let user = JSON.parse(localStorage.getItem("user"));
+          user.avatarUrl = res.data.data;
+          localStorage.setItem("user", JSON.stringify(user));
+        };
+      })
+    },
+
+    postDescription() {
+      if (this.oldDescription == this.description) {
+        return;
+      }
+      let that = this;
+      this.$axios.post(
+        that.$store.state.property.ip + "/ki-video/user/changePersonDescription",
+        this.$qs.stringify({
+          username: that.username,
+          description: that.description
+        })
+      ).then(function (response){
+        let res = JSON.parse(JSON.stringify(response));
+        console.log(res.data.data);
+      })
+    },
+
+    editMessage() {
+      this.$refs.input.focus();
+    },
+
     handleVisiable() {
       this.loginStatus = localStorage.isLogin == "true" ? true : false;
       if (this.loginStatus) {

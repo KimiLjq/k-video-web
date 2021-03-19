@@ -56,7 +56,9 @@ export default {
     linkToPlayer(obj) {
       let testData = {
         id: obj.id,
+        author: obj.author,
         title: obj.title,
+        likeCount: obj.likeCount,
         poster: obj.poster,
         amount: obj.amount,
         firstType: obj.firstType,

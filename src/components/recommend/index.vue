@@ -36,7 +36,9 @@ export default {
       console.log(obj.title);
       let recommendData = {
         id: obj.id,
+        author: obj.author,
         title: obj.title,
+        likeCount: obj.likeCount,
         poster: obj.poster,
         amount: obj.amount,
         firstType: obj.firstType,
@@ -82,6 +84,7 @@ export default {
 
     .recommend-item {
       .el-col {
+        cursor: pointer;
         img {
           width: 100%;
         }

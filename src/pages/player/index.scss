@@ -39,6 +39,9 @@
           height: 100%;
 
           .play-title {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
             font: {
               size: 30px;
               family: MicrosoftYaHei;
@@ -50,7 +53,6 @@
 
             p {
               display: -webkit-box;
-              min-width: 300px;
               text-overflow: ellipsis;
               -webkit-line-clamp: 1;
               white-space: nowrap;
@@ -58,6 +60,13 @@
               -webkit-box-orient: vertical;
               /* autoprefixer: on */
               overflow: hidden;
+            }
+
+            span {
+              margin-left: 50px;
+              font-size: 22px !important;
+              color: #FF7755;
+              cursor: pointer;
             }
           }
 
@@ -93,7 +102,22 @@
               }
             }
 
-            .play-amount {}
+            .play-amount {margin-right: 40px;}
+
+            .play-like {
+              cursor: pointer;
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+
+              span {
+                margin-left: 5px;
+              }
+
+              like {
+                color: #1296db;
+              }
+            }
           }
         }
 

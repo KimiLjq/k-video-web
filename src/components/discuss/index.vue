@@ -66,6 +66,7 @@ export default {
   },
   mounted() {
     document.addEventListener('visibilitychange', this.handleVisiable);
+    this.$store.commit('changeLoginStatus', localStorage.isLogin == "true" ? true : false);
   },
   methods: {
     setLoginStatus() {
@@ -116,6 +117,7 @@ export default {
   },
   computed: {
     getLoginStatus() {
+      console.log("this.$store.state.isLogin", this.$store.state.isLogin);
       return this.$store.state.isLogin;
     }
   },

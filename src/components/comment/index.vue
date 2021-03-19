@@ -102,7 +102,6 @@ export default {
           if (res.data.code == 200) {
             let webComment = JSON.parse(JSON.stringify(res.data.data));
             console.log("secondComment");
-            console.log(res.data.data);
             that.data.secondComment.push(webComment.firstComment);
           }
         })
@@ -118,7 +117,6 @@ export default {
       this.isShowInputArea = isShowInputArea;
       this.holder = "@"+name;
       this.toUserName = name;
-      console.log(this.toUserName)
     }
   },
 

@@ -23,6 +23,7 @@
               <div class="play-details">
                 <div class="play-title">
                   <p ref="playTitle">{{title}}</p>
+                  <span @click="linkToPersonal()">{{author}}</span>
                 </div>
                 <div class="play-append">
                   <div class="play-share">
@@ -39,6 +40,11 @@
                       浏览量：
                       <span>{{amount}}</span>
                     </p>
+                  </div>
+                  <div class="play-like">
+                    <img alt="like" src="../../assets/like.png" @click="changeLikeStatus()" v-show="!isLike">
+                    <ima alt="liked" src="" @click="changeLikeStatus()" v-show="isLike"></ima>
+                    <span v-bind:class="{'like': isLike}">{{likeCount}}</span>
                   </div>
                 </div>
               </div>
@@ -90,9 +96,12 @@ export default {
   data() {
     return {
       title: "",
+      author: "",
       amount: 0,
+      likeCount: 0,
       activeitem: ["", "", "", "", "", "", ""],
       videoData: {},
+      isLike: false,
       commentData: Array,
       recommendVideos: Array,
       isReload: true,
@@ -142,7 +151,6 @@ export default {
   },
   methods: {
     requestData() {
-      console.log(this.videoData)
       if (this.videoData == {}) {
         this.videoData = JSON.parse(localStorage.getItem("shotcut_videoData"));
         console.log("get videoData from cache")
@@ -181,7 +189,9 @@ export default {
       })
 
       this.title = this.videoData.title;
+      this.author = this.videoData.author;
       this.amount = this.videoData.amount;
+      this.likeCount = this.videoData.likeCount;
       this.playerOptions.poster = this.videoData.poster;
       this.playerOptions.sources = this.videoData.source;
     },
@@ -194,46 +204,27 @@ export default {
         };
       }
     },
+
+    linkToPersonal() {
+      let personalIndex = this.$router.resolve({
+        path: '/person',
+        query: {username: this.author}
+      });
+
+      window.open(personalIndex.href, '_blank');
+    },
+
+    changeLikeStatus() {
+      console.log("changeLoginStatus");
+      
+    },
+
     googleAd() {
       window.open(
         "https://www.google.com/adsense/start/#/?modal_active=none",
         "_blank"
       );
     },
-    // changeVideoData(obj) {
-    //   // this.videoData = recommendData;
-    //   // localStorage.setItem("shotcut_videoData", JSON.stringify(this.videoData));
-    //   // //console.log(this.videoData);
-    //   //
-    //   // this.isReload = false;
-    //   //
-    //   // this.$nextTick(() => {
-    //   //   this.title = this.videoData.title;
-    //   //   this.amount = this.videoData.amount;
-    //   //   this.playerOptions.poster = this.videoData.poster;
-    //   //   this.playerOptions.sources = this.videoData.source;
-    //   //   this.isReload = true;
-    //   // });
-    //   let testData = {
-    //     id: obj.id,
-    //     title: obj.title,
-    //     poster: obj.poster,
-    //     amount: obj.amount,
-    //     firstType: obj.firstType,
-    //     createTime: obj.createTime,
-    //     source: [
-    //       {
-    //         withCredentials: false,
-    //         type: obj.type,
-    //         src: obj.videoUrl
-    //       }
-    //     ]
-    //   };
-    //   this.$router.push({
-    //     path: "/player",
-    //     query: { data: testData }
-    //   });
-    // },
   },
 };
 </script>

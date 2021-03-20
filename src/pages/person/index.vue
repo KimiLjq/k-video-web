@@ -119,9 +119,11 @@ export default {
   mounted() {
     document.addEventListener('visibilitychange', this.handleVisiable);
     this.username = this.$route.query.username;
+    console.log("localStorage.isLogin", localStorage.isLogin);
     if (localStorage.isLogin == "true") {
       this.loginStatus = true;
       this.loginUsername = JSON.parse(localStorage.getItem("user")).username;
+      console.log("this.loginUsername = JSON.parse(localStorage.getItem(\"user\")).username;", this.loginUsername);
       if (this.loginUsername == this.username) {
         this.isUserSelf = true;
       }

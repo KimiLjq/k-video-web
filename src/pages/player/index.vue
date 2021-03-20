@@ -43,7 +43,7 @@
                   </div>
                   <div class="play-like">
                     <img alt="like" src="../../assets/like.png" @click="changeLikeStatus()" v-show="!isLike">
-                    <ima alt="liked" src="" @click="changeLikeStatus()" v-show="isLike"></ima>
+                    <img alt="liked" src="../../assets/liked.png" @click="changeLikeStatus()" v-show="isLike">
                     <span v-bind:class="{'like': isLike}">{{likeCount}}</span>
                   </div>
                 </div>
@@ -102,6 +102,7 @@ export default {
       activeitem: ["", "", "", "", "", "", ""],
       videoData: {},
       isLike: false,
+      loginUsername: "",
       commentData: Array,
       recommendVideos: Array,
       isReload: true,
@@ -159,6 +160,10 @@ export default {
         console.log("save videoData in cache");
       }
 
+      if (this.$store.state.isLogin) {
+        this.loginUsername = JSON.parse(localStorage.getItem("user")).username;
+      }
+
       let that = this;
       this.$axios.post(
         that.$store.state.property.ip + "/ki-video/comment/getComments",
@@ -182,11 +187,27 @@ export default {
         let res = JSON.parse(JSON.stringify(response));
         if (res.data.code == 200) {
           console.log("get recommend video success");
-          console.log(res.data.data);
-          console.log(that.videoData.id)
           that.recommendVideos = res.data.data;
         }
       })
+
+      if (this.$store.state.isLogin) {
+        this.$axios.post(
+          that.$store.state.property.ip + "/ki-video/userLikeVideo/queryLikeVideo",
+          that.$qs.stringify({
+            username: that.loginUsername,
+            videoId: that.videoData.id
+          })
+        ).then(function (response){
+          let res = JSON.parse(JSON.stringify(response));
+          if (res.data.code == 200) {
+            that.isLike = true;
+          }
+          else if (res.data.code == 512) {
+            console.log(res.data.msg);
+          }
+        })
+      }
 
       this.title = this.videoData.title;
       this.author = this.videoData.author;
@@ -215,8 +236,44 @@ export default {
     },
 
     changeLikeStatus() {
-      console.log("changeLoginStatus");
-      
+      if (!this.$store.state.isLogin) {
+        alert("请先登录");
+        return;
+      }
+
+      let that = this;
+      if (this.isLike) {
+        this.$axios.post(
+          that.$store.state.property.ip + "/ki-video/userLikeVideo/cancelLikeVideo",
+          that.$qs.stringify({
+            username: that.loginUsername,
+            videoId: that.videoData.id,
+            author: that.videoData.author
+          })
+        ).then(function (response) {
+          let res = JSON.parse(JSON.stringify(response));
+          if (res.data.code == 200) {
+            that.isLike = false;
+            that.likeCount = that.likeCount - 1;
+          }
+        })
+      }
+      else {
+        this.$axios.post(
+          that.$store.state.property.ip + "/ki-video/userLikeVideo/addLikeVideo",
+          that.$qs.stringify({
+            username: that.loginUsername,
+            videoId: that.videoData.id,
+            author: that.videoData.author
+          })
+        ).then(function (response) {
+          let res = JSON.parse(JSON.stringify(response));
+          if (res.data.code == 200) {
+            that.isLike = true;
+            that.likeCount = that.likeCount + 1;
+          }
+        })
+      }
     },
 
     googleAd() {

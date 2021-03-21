@@ -7,15 +7,17 @@
     @mouseover="mouseIn()"
     @mouseout="mouseOut()"
   >
-    <img alt="bmp" :src="data.poster">
-    <div class="video-info">
-      <div class="introduce">
-        <p v-bind:class="{'items-selected':isHover}">{{data.title}}</p>
+    <div class="items-bg">
+      <div class="items-cover">
+        <img alt="bmp" style="width: 100%;" :src="data.poster">
       </div>
-      <div class="time">
-        <p v-bind:class="{'items-selected':isHover}">收藏于：2021-2-20</p>
-      </div>
+      <p v-bind:class="{'items-selected':isHover}">{{data.title}}</p>
     </div>
+
+    <div class="time">
+      <p v-bind:class="{'items-selected':isHover}">{{this.text}}：{{data.createTime}}</p>
+    </div>
+
   </div>
 </template>
 
@@ -23,7 +25,8 @@
 export default {
   name: "myvideoitems",
   props: {
-    data: Object
+    data: Object,
+    text: "",
   },
   data() {
     return {
@@ -67,56 +70,59 @@ export default {
 
 <style lang="scss">
 .myvideoitems {
-  width: 18%;
-  margin: 2% auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  margin: 10px 4%;
   cursor: pointer;
+  width: 25%;
 
-  img {
-    width: 100%;
-  }
+  items-bg {
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(243, 243, 243);
 
-  .video-info {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-
-    .introduce {
+    .items-cover {
       width: 100%;
-      height: 50px;
-      max-height: 50px;
-      margin-top: 4px;
+      height: 100%;
+
+      img {
+        width: 100%;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+      }
+    }
+
+    p {
+      width: 100%;
+      height: 42px;
+      padding-left: 5px;
+      padding-right: 5px;
       word-break: normal;
       white-space: pre-wrap;
       word-wrap: break-word;
+      text-align: left;
       font: {
         size: 14px;
         family: MicrosoftYaHei;
         weight: 400;
       }
-      color: #000000;
-      line-height: 21px;
-      //cursor: pointer;
+      color: rgb(20, 20, 20);
+      line-height: 18px;
+      //letter-spacing: 1px;
+      cursor: pointer;
     }
+  }
 
-    .time {
-      width: 100%;
-      margin-top: 15px;
-      font: {
-        size: 12px;
-        family: MicrosoftYaHei;
-      };
-      color: rgba(102, 102, 102, 1);
-    }
+  .time {
+    width: 100%;
+    margin-top: 5px;
+    font: {
+      size: 12px;
+      family: MicrosoftYaHei;
+    };
+    color: rgba(102, 102, 102, 1);
+  }
 
-    .items-selected {
-      color: rgba(255, 186, 116, 1) !important;
-    }
+  .items-selected {
+    color: rgba(255, 186, 116, 1) !important;
   }
 }
 </style>

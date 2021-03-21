@@ -15,6 +15,11 @@ import login from '@/pages/login'
 import register from '@/pages/register'
 import forget from '@/pages/forget'
 import person from '@/pages/person'
+import myVideo from '@/pages/myVideo'
+import likeVideo from '@/pages/likeVideo'
+import follow from '@/pages/follow'
+import fans from '@/pages/fans'
+import message from '@/pages/message'
 import test from '@/pages/test'
 import testplayer from '@/pages/testplayer'
 import exportJSON from '@/pages/exportJSON'
@@ -33,9 +38,6 @@ export default new Router({
       path: '/today',
       name: 'today',
       component: resolve => require(['@/pages/today'],resolve),
-      children: [
-
-      ]
     },
     {
       path: '/rank',
@@ -100,7 +102,34 @@ export default new Router({
     {
       path: '/person',
       name: 'person',
-      component: resolve => require(['@/pages/person'],resolve)
+      component: resolve => require(['@/pages/person'],resolve),
+      children: [
+        {
+          path: '',
+          name: '',
+          component: resolve => require(['@/pages/myVideo'],resolve),
+        },
+        {
+          path: 'likeVideo',
+          name: 'likeVideo',
+          component: resolve => require(['@/pages/likeVideo'],resolve),
+        },
+        {
+          path: 'follow',
+          name: 'follow',
+          component: resolve => require(['@/pages/follow'],resolve),
+        },
+        {
+          path: "fans",
+          name: "fans",
+          component: resolve => require(['@/pages/fans'],resolve),
+        },
+        {
+          path: "message",
+          name: "message",
+          component: resolve => require(['@/pages/message'],resolve),
+        }
+      ]
     }
   ],
   scrollBehavior(to, from, savedPosition) {

@@ -242,7 +242,7 @@ export default {
     logout() {
       console.log("退出登录");
       this.$store.commit('changeLoginStatus', false);
-      if (this.$route.name == "person" && this.personUsername == JSON.parse(localStorage.getItem("user")).username) {
+      if (location.pathname.indexOf("person") > 0 && this.personUsername == JSON.parse(localStorage.getItem("user")).username) {
         this.$router.push({path: "/"});
       }
 

@@ -1,13 +1,13 @@
 <template>
   <div class="followerItem">
     <div class="container">
-      <img class="icon-user" alt="profile" src="../../assets/profilephoto.png" @click="toPersonalPage(data)">
+      <img class="icon-user" alt="profile" :src="avatar" @click="toPersonalPage(username)">
       <div class="info">
-        <spin>Kimijiaqili</spin>
-        <p>随便说说，展示用户的个性说明</p>
+        <span @click="toPersonalPage(username)">{{username}}</span>
+        <p>{{description}}</p>
       </div>
-      <el-button v-show="!isfollow" class="follow-btn" size="mini" @click="follow()" round>关注TA</el-button>
-      <el-button v-show="isfollow" class="unfollow-btn" size="mini" @click="unfollow()" @mouseover.native="over()" @mouseout.native="out()" round>{{followText}}</el-button>
+      <el-button v-show="!getFollowStatus" class="follow-btn" size="mini" @click="follow()" round>关注TA</el-button>
+      <el-button v-show="getFollowStatus" class="unfollow-btn" size="mini" @click="unfollow()" @mouseover.native="over()" @mouseout.native="out()" round>{{followText}}</el-button>
     </div>
     <div class="line"></div>
   </div>
@@ -21,26 +21,92 @@ export default {
   },
   data() {
     return {
+      avatar: "",
+      username: "",
+      description: "",
       isfollow:false,
       followText: "已关注",
-      isHover: false,
     }
   },
+  mounted() {
+    this.avatar = this.$store.state.property.ip + this.data.avatarUrl;
+    this.username = this.data.username;
+    this.description = this.data.description;
+    console.log("this.data.follow=", this.data.follow);
+    this.isfollow = this.data.follow;
+    console.log("this.isfollow = ", this.isfollow);
+  },
   methods: {
-    toPersonalPage(obj) {
+    toPersonalPage(username) {
+      let personalIndex = this.$router.resolve({
+        path: '/person',
+        query: {username: username}
+      });
 
+      window.open(personalIndex.href, '_blank');
     },
+
     follow() {
-      this.isfollow = true;
+      let loginUsername = JSON.parse(localStorage.getItem("user")).username;
+      if (loginUsername == this.username) {
+        return;
+      }
+
+      if (localStorage.isLogin == "true") {
+        let that = this;
+        this.$axios.post(
+          that.$store.state.property.ip + "/ki-video/userFans/addRelationship",
+          that.$qs.stringify({
+            username: that.username,
+            fansUsername: loginUsername
+          })
+        ).then(function (response) {
+          let res = JSON.parse(JSON.stringify(response));
+          if (res.data.code == 200) {
+            that.isfollow = true;
+          }
+        })
+      }
+      else {
+        alert("请先登录才能关注噢");
+      }
     },
     unfollow() {
-      this.isfollow = false;
+      let loginUsername = JSON.parse(localStorage.getItem("user")).username;
+      if (loginUsername == this.username) {
+        return;
+      }
+
+      if (localStorage.isLogin == "true") {
+        let that = this;
+        let loginUsername = JSON.parse(localStorage.getItem("user")).username;
+        this.$axios.post(
+          that.$store.state.property.ip + "/ki-video/userFans/cancelRelationship",
+          that.$qs.stringify({
+            username: that.username,
+            fansUsername: loginUsername
+          })
+        ).then(function (response) {
+          let res = JSON.parse(JSON.stringify(response));
+          if (res.data.code == 200) {
+            that.isfollow = false;
+          }
+        })
+      }
     },
     over() {
       this.followText = "取关";
     },
     out() {
       this.followText = "已关注";
+    }
+  },
+  computed: {
+    getFollowStatus() {
+      if (!this.$store.state.isLogin) {
+        return false;
+      }
+      return this.isfollow;
     }
   }
 }
@@ -77,6 +143,16 @@ export default {
       margin-left: 20px;
       flex-direction: row;
       align-items: center;
+
+      span {
+        cursor: pointer;
+      }
+
+      &:hover {
+        span {
+          color: rgba(255, 186, 116, 1);
+        }
+      }
 
       p {
         margin-top: 5px;

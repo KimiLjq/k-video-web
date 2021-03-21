@@ -39,35 +39,35 @@
       <div class="mid">
         <div class="left">
           <ul>
-            <li @click="linkTo('',0)" v-bind:class="{'active':item[0]}">
+            <li @click="linkTo('/person',0)" v-bind:class="{'active':item[0]}">
               <a>
                 <div class="icon"></div>
                 <span style="vertical-align: middle;">{{getNick}}视频</span>
                 <img class="right-icon" src="../../assets/right-icon.png">
               </a>
             </li>
-            <li @click="linkTo('',1)" v-bind:class="{'active':item[1]}">
+            <li @click="linkTo('/person/likeVideo',1)" v-bind:class="{'active':item[1]}">
               <a>
                 <div class="icon"></div>
                 <span style="vertical-align: middle;">{{getNick}}收藏</span>
                 <img class="right-icon" src="../../assets/right-icon.png">
               </a>
             </li>
-            <li @click="linkTo('',2)" v-bind:class="{'active':item[2]}">
+            <li @click="linkTo('/person/follow',2)" v-bind:class="{'active':item[2]}">
               <a>
                 <div class="icon"></div>
                 <span style="vertical-align: middle;">{{getNick}}关注</span>
                 <img class="right-icon" src="../../assets/right-icon.png">
               </a>
             </li>
-            <li @click="linkTo('',3)" v-bind:class="{'active':item[3]}">
+            <li @click="linkTo('/person/fans',3)" v-bind:class="{'active':item[3]}">
               <a>
                 <div class="icon"></div>
                 <span style="vertical-align: middle;">{{getNick}}粉丝</span>
                 <img class="right-icon" src="../../assets/right-icon.png">
               </a>
             </li>
-            <li @click="linkTo('',4)" v-bind:class="{'active':item[4]}" v-show="isUserSelf">
+            <li @click="linkTo('/person/message',4)" v-bind:class="{'active':item[4]}" v-show="isUserSelf">
               <a>
                 <div class="icon"></div>
                 <span style="vertical-align: middle;">我的消息</span>
@@ -77,10 +77,10 @@
           </ul>
         </div>
         <div class="right">
-          <myvideoitems v-show="item[0]" v-for="ele in module_data_1" :data="ele" :key="ele.id"></myvideoitems>
-          <follower-item v-show="item[2]"></follower-item>
-          <follower-item v-show="item[2]"></follower-item>
-            <router-view></router-view>
+<!--          <myvideoitems v-show="item[0]" v-for="ele in module_data_1" :data="ele" :key="ele.id"></myvideoitems>-->
+<!--          <follower-item v-show="item[2]"></follower-item>-->
+<!--          <follower-item v-show="item[2]"></follower-item>-->
+          <router-view></router-view>
         </div>
       </div>
     </div>
@@ -96,13 +96,11 @@
 export default {
   components: {},
   inject: ["reload"],
-  props: {
-    username:"",
-  },
   data() {
     return {
       user:Object,
       loginStatus: false,
+      username: this.username,
       loginUsername: "",
       isUserSelf: false,
       relationship: false, //false表示未关注
@@ -123,7 +121,6 @@ export default {
     if (localStorage.isLogin == "true") {
       this.loginStatus = true;
       this.loginUsername = JSON.parse(localStorage.getItem("user")).username;
-      console.log("this.loginUsername = JSON.parse(localStorage.getItem(\"user\")).username;", this.loginUsername);
       if (this.loginUsername == this.username) {
         this.isUserSelf = true;
       }
@@ -157,6 +154,10 @@ export default {
         this.item[j] = false;
       }
       this.item[index] = true;
+      this.$router.push({
+        path: path,
+        query: {username: this.username}
+      });
     },
 
     getFocus() {
